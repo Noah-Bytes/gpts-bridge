@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,8 +14,8 @@ model author {
   selected_display            String?   @db.VarChar(20)
   is_verified                 Boolean?
   will_receive_support_emails Boolean?
-  create_time                 DateTime? @default(now()) @db.Timestamp(6)
-  upt_time                    DateTime? @default(now()) @db.Timestamp(6)
+  create_time                 DateTime? @default(now()) @db.DateTime(0)
+  upt_time                    DateTime? @default(now()) @db.DateTime(0)
 }
 
 model category {
@@ -26,21 +26,21 @@ model category {
   display_type  String?  @db.VarChar(10)
   display_group String?  @db.VarChar(30)
   locale        String?  @db.VarChar(10)
-  create_time   DateTime @default(now()) @db.Timestamp(6)
-  upt_time      DateTime @default(now()) @db.Timestamp(6)
+  create_time   DateTime @default(dbgenerated("(now())")) @db.DateTime(0)
+  upt_time      DateTime @default(now()) @db.DateTime(0)
 }
 
 model gizmo {
   id              String   @id @db.VarChar(20)
   user_id         String   @db.VarChar(100)
   name            String?  @db.VarChar(64)
-  image           String?
+  image           String?  @db.Text
   description     String?  @db.VarChar(300)
   welcome_message String?  @db.VarChar(400)
-  prompt_starters String?
+  prompt_starters String?  @db.Text
   short_url       String?  @db.VarChar(100)
   categories      String?  @db.VarChar(300)
-  updated_at      DateTime @db.Timestamp(6)
+  updated_at      DateTime @db.DateTime(0)
   tags            String?  @db.VarChar(200)
   tools           String?  @db.VarChar(100)
 
