@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false }));
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap().catch((e) => {
   console.log(e);
