@@ -1,0 +1,3 @@
+### 获得单个
+GET {{host}}/gizmo-metrics?gizmoId=g-5sKOpNnQE&data=2024-01-15
+Content-Type: application/json

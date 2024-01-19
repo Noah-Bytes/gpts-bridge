@@ -1,0 +1,9 @@
+### 获取列表
+POST {{host}}/gpts/list
+Content-Type: application/json
+
+{
+  "pageNo": 1,
+  "pageSize": 20,
+  "date": "2024-01-15"
+}

@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model author {
+  user_id                     String    @id @db.VarChar(100)
+  display_name                String    @db.VarChar(30)
+  link_to                     String?   @db.VarChar(1000)
+  selected_display            String?   @db.VarChar(20)
+  is_verified                 Boolean?
+  will_receive_support_emails Boolean?
+  create_time                 DateTime? @default(now()) @db.Timestamp(6)
+  upt_time                    DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model category {
+  id            String   @id @db.VarChar(20)
+  key           String?  @db.VarChar(40)
+  title         String?  @db.VarChar(30)
+  description   String?  @db.VarChar(100)
+  display_type  String?  @db.VarChar(10)
+  display_group String?  @db.VarChar(30)
+  locale        String?  @db.VarChar(10)
+  create_time   DateTime @default(now()) @db.Timestamp(6)
+  upt_time      DateTime @default(now()) @db.Timestamp(6)
+}
+
+model gizmo {
+  id              String   @id @db.VarChar(20)
+  user_id         String   @db.VarChar(100)
+  name            String?  @db.VarChar(64)
+  image           String?
+  description     String?  @db.VarChar(300)
+  welcome_message String?  @db.VarChar(400)
+  prompt_starters String?
+  short_url       String?  @db.VarChar(100)
+  categories      String?  @db.VarChar(300)
+  updated_at      DateTime @db.Timestamp(6)
+  tags            String?  @db.VarChar(200)
+  tools           String?  @db.VarChar(100)
+
+  @@index([user_id], map: "gizmo_user_id_index")
+}
+
+model gizmo_metrics {
+  id                    BigInt  @id @default(autoincrement())
+  user_id               String  @db.VarChar(100)
+  gizmo_id              String? @db.VarChar(20)
+  num_conversations_str String? @db.VarChar(10)
+  pv                    Int     @default(0)
+  date                  String  @db.VarChar(10)
+
+  @@unique([gizmo_id, date], map: "gizmo_metrics_gizmo_id_date_uindex")
+  @@index([user_id, date], map: "gizmo_metrics_user_id_date_index")
+}

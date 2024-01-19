@@ -1,0 +1,12 @@
+### 获得单个
+GET {{host}}/gizmos/g-5sKOpNnQE
+Content-Type: application/json
+
+### 获取列表
+POST {{host}}/gizmos/list
+Content-Type: application/json
+
+{
+  "pageNo": 1,
+  "pageSize": 20
+}
