@@ -9,9 +9,10 @@
     "build": "npx prisma generate && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "set NODE_ENV=development && nest start --watch",
+    "start:dev": "set NODE_ENV=development&& nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "set NODE_ENV=production && node dist/main",
+    "start:prod": "set NODE_ENV=production&& node dist/main",
+    "start:prod:liunx": "export NODE_ENV=production&& node dist/main",
     "db:pull": "dotenv -e .env.development -- prisma db pull",
     "postinstall": "npx prisma generate"
   },
