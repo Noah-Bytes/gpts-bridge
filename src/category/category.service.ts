@@ -97,13 +97,15 @@ export class CategoryService {
   async runSyncGpt() {
     const list = await this.findAll();
     for (let i = 0; i < list.length; i++) {
+      const item = list[i];
+      this.logger.info('【队列】生成 %s 任务', item.id);
       await this.gtpSyncQueue.add(
         CHAT_GPTS_SYNC.jobs.category,
         {
-          key: list[i].key,
+          key: item.key,
         },
         {
-          jobId: list[i].key,
+          jobId: item.key,
         },
       );
     }
