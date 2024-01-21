@@ -23,7 +23,7 @@ export class CategoryProcessor {
   ) {}
 
   @Process(CHAT_GPTS_SYNC.jobs.category)
-  async handleCategory(job: Job) {
+  async handleGPTsByCategory(job: Job) {
     const { key } = job.data;
 
     let cursor = 0;

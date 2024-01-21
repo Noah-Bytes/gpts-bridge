@@ -20,7 +20,7 @@ export class AuthorProcessor {
   ) {}
 
   @Process(CHAT_GPTS_SYNC.jobs.userId)
-  async handleCategory(job: Job) {
+  async handleGPTsByUserId(job: Job) {
     const { userId } = job.data;
 
     this.logger.info('【用户维度同步】开始同步%s', userId);

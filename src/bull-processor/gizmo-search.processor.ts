@@ -20,7 +20,7 @@ export class GizmoSearchProcessor {
   ) {}
 
   @Process(CHAT_GPTS_SYNC.jobs.query)
-  async handleGizmoSearch(job: Job) {
+  async handleGPTsBySearch(job: Job) {
     const { query } = job.data;
 
     this.logger.info('【搜索维度同步】开始同步 %s', query);
