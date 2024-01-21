@@ -1,9 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { CategoryService } from './category.service';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
 import { Logger } from 'winston';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 

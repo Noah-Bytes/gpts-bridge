@@ -42,7 +42,8 @@ model gizmo {
   categories      String?  @db.VarChar(300)
   updated_at      DateTime @db.DateTime(0)
   tags            String?  @db.VarChar(200)
-  tools           String?  @db.VarChar(100)
+  tools           String?  @db.VarChar(300)
+  language        String?  @db.VarChar(30)
 
   @@index([user_id], map: "gizmo_user_id_index")
 }
@@ -57,4 +58,9 @@ model gizmo_metrics {
 
   @@unique([gizmo_id, date], map: "gizmo_metrics_gizmo_id_date_uindex")
   @@index([user_id, date], map: "gizmo_metrics_user_id_date_index")
+}
+
+model language {
+  id          String    @id @db.VarChar(30)
+  create_time DateTime? @default(dbgenerated("'now()'")) @db.DateTime(0)
 }

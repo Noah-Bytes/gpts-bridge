@@ -14,6 +14,7 @@ import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 import { GizmoSearchModule } from '../gizmo-search/gizmo-search.module';
 import { GptsModule } from '../gpts/gpts.module';
+import { LanguageModule } from '../language/language.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { GptsModule } from '../gpts/gpts.module';
     ChatOpenaiModule,
     GizmoSearchModule,
     GptsModule,
+    LanguageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

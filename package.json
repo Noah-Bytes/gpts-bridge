@@ -34,6 +34,7 @@
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
     "nest-winston": "^1.9.4",
+    "node-nlp": "^4.27.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "winston": "^3.11.0",

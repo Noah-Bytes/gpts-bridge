@@ -126,8 +126,8 @@ export class AuthorService {
     );
     for (let i = 0; i < items.length; i++) {
       const gpt = items[i];
-      // 更新作者
-      await this.upsertByGpt(gpt);
+      // 更新作者，无需更新
+      // await this.upsertByGpt(gpt);
       // 更新gpt信息
       await this.gizmosService.upsertByGpt(gpt);
       // 更新数据

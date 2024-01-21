@@ -8,6 +8,7 @@ import { paginate } from '../utils/page';
 import { Gpt } from '../chat-openai/dto/gpt.dto';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { LanguageService } from '../language/language.service';
 
 @Injectable()
 export class GizmosService {
@@ -15,6 +16,7 @@ export class GizmosService {
   constructor(
     private configService: ConfigService,
     private prismaService: PrismaService,
+    private languageService: LanguageService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {
     this.userAgent = this.configService.get<string>('PC_USER_AGENT');
@@ -23,6 +25,19 @@ export class GizmosService {
   async upsertByGpt(gpt: Gpt) {
     const gizmos = this.formatByGpt(gpt);
     try {
+      const old = await this.findOne(gizmos.id);
+
+      if (!old || !old.language) {
+        try {
+          gizmos.language = this.languageService.guess(
+            gizmos.name,
+            1,
+          )[0].language;
+        } catch (e) {
+          gizmos.language = 'unknown';
+        }
+      }
+
       await this.prismaService.gizmo.upsert({
         where: {
           id: gizmos.id,
@@ -64,6 +79,7 @@ export class GizmosService {
 
   formatByGpt(gpt: Gpt): GizmoModel {
     const { gizmo, tools } = gpt;
+    // @ts-ignore
     return {
       id: gizmo.id,
       user_id: gizmo.author.user_id,
