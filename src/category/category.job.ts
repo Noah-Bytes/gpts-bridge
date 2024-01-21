@@ -10,7 +10,7 @@ export class CategoryJob {
     private categoryService: CategoryService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
-  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   runSyncGpt() {
     this.categoryService.runSyncGpt().catch(this.logger.error);
   }

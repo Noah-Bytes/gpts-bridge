@@ -3,9 +3,6 @@ import { AuthorService } from './author.service';
 import { AuthorController } from './author.controller';
 import { PrismaService } from '../prisma.service';
 import { ChatOpenaiModule } from '../chat-openai/chat-openai.module';
-import { GizmosModule } from '../gizmos/gizmos.module';
-import { GizmoMetricsModule } from '../gizmo-metrics/gizmo-metrics.module';
-import { AuthorProcessor } from './author.processor';
 import { BullModule } from '@nestjs/bull';
 import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
 
@@ -15,11 +12,9 @@ import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
       name: CHAT_GPTS_SYNC.name,
     }),
     ChatOpenaiModule,
-    GizmosModule,
-    GizmoMetricsModule,
   ],
   controllers: [AuthorController],
-  providers: [PrismaService, AuthorService, AuthorProcessor],
+  providers: [PrismaService, AuthorService],
   exports: [AuthorService],
 })
 export class AuthorModule {}

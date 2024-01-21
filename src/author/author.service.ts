@@ -8,9 +8,6 @@ import { Gpt } from '../chat-openai/dto/gpt.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
 import { Queue } from 'bull';
-import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
-import { GizmosService } from '../gizmos/gizmos.service';
-import { GizmoMetricsService } from '../gizmo-metrics/gizmo-metrics.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 
@@ -18,9 +15,6 @@ import { Logger } from 'winston';
 export class AuthorService {
   constructor(
     private prismaService: PrismaService,
-    private chatOpenaiService: ChatOpenaiService,
-    private gizmosService: GizmosService,
-    private gizmoMetricsService: GizmoMetricsService,
     @InjectQueue(CHAT_GPTS_SYNC.name) private readonly gtpSyncQueue: Queue,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
@@ -60,8 +54,8 @@ export class AuthorService {
     );
   }
 
-  async findOne(userId: string) {
-    return await this.prismaService.author.findFirst({
+  findOne(userId: string) {
+    return this.prismaService.author.findFirst({
       where: {
         user_id: userId,
       },
@@ -109,32 +103,9 @@ export class AuthorService {
       {
         jobId: userId,
         repeat: {
-          cron: '0 0 * * *',
+          cron: '0 1 * * *',
         },
       },
     );
-  }
-
-  /**
-   * 根据用户获取gpts
-   * @param userId
-   */
-  async syncByUser(userId: string) {
-    this.logger.info('【用户维度同步】开始同步%s', userId);
-    const { items } = await this.chatOpenaiService.getGizmosByUser(userId);
-    this.logger.info(
-      '【用户维度同步】 userId: %s 同步到 %s 个 gpt',
-      userId,
-      items.length,
-    );
-    for (let i = 0; i < items.length; i++) {
-      const gpt = items[i];
-      // 更新作者，无需更新
-      // await this.upsertByGpt(gpt);
-      // 更新gpt信息
-      await this.gizmosService.upsertByGpt(gpt);
-      // 更新数据
-      await this.gizmoMetricsService.createByGpt(gpt);
-    }
   }
 }

@@ -15,6 +15,7 @@ import 'winston-daily-rotate-file';
 import { GizmoSearchModule } from '../gizmo-search/gizmo-search.module';
 import { GptsModule } from '../gpts/gpts.module';
 import { LanguageModule } from '../language/language.module';
+import { BullProcessorModule } from '../bull-processor/bull-processor.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { LanguageModule } from '../language/language.module';
     GizmoSearchModule,
     GptsModule,
     LanguageModule,
+    BullProcessorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
