@@ -106,6 +106,9 @@ export class CategoryService {
         },
         {
           jobId: item.key,
+          repeat: {
+            cron: '0 0 * * *',
+          },
         },
       );
     }

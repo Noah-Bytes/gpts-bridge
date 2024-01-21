@@ -108,6 +108,9 @@ export class AuthorService {
       },
       {
         jobId: userId,
+        repeat: {
+          cron: '0 0 * * *',
+        },
       },
     );
   }
