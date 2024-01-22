@@ -8,11 +8,13 @@ import { GizmoSearchService } from '../gizmo-search/gizmo-search.service';
 import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { AuthorService } from '../author/author.service';
 
 @Processor(CHAT_GPTS_SYNC.name)
 export class AuthorProcessor {
   constructor(
     private chatOpenaiService: ChatOpenaiService,
+    private authorService: AuthorService,
     private gizmosService: GizmosService,
     private gizmoMetricsService: GizmoMetricsService,
     private gizmoSearchService: GizmoSearchService,
@@ -30,10 +32,14 @@ export class AuthorProcessor {
       userId,
       items.length,
     );
+
+    // 更新作者，无需更新
+    await this.authorService.update(userId, {
+      gpt_total: items.length,
+    });
+
     for (let i = 0; i < items.length; i++) {
       const gpt = items[i];
-      // 更新作者，无需更新
-      // await this.upsertByGpt(gpt);
       // 更新gpt信息
       await this.gizmosService.upsertByGpt(gpt);
       // 更新数据

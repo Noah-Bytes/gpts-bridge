@@ -1,3 +1,8 @@
 ### Send POST request with json body
 POST {{host}}/category/run
 Content-Type: application/json
+
+
+### get categories
+GET {{host}}/category
+Content-Type: application/json

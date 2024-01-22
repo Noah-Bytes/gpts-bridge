@@ -14,6 +14,7 @@ model author {
   selected_display            String?   @db.VarChar(20)
   is_verified                 Boolean?
   will_receive_support_emails Boolean?
+  gpt_total                   Int?
   create_time                 DateTime? @default(now()) @db.DateTime(0)
   upt_time                    DateTime? @default(now()) @db.DateTime(0)
 }
