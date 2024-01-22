@@ -33,6 +33,9 @@ export class GizmosService {
             gizmos.name,
             1,
           )[0].language;
+          await this.languageService.create({
+            id: gizmos.language,
+          });
         } catch (e) {
           gizmos.language = 'unknown';
         }
