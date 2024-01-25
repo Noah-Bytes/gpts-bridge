@@ -121,7 +121,7 @@ export class GizmoMetricsService {
   async top(params: TopGizmosMetricsDto) {
     const list = await this.prismaService.gizmo_metrics.findMany({
       where: {
-        // date: dayjs().format(YYYYMMDD),
+        date: dayjs().format(YYYYMMDD),
       },
       orderBy: {
         num_conversations_str: 'desc',
