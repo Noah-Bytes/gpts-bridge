@@ -9,6 +9,7 @@ import { Gpt } from '../chat-openai/dto/gpt.dto';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { LanguageService } from '../language/language.service';
+import { TopGizmosDto } from './dto/get-gizmos.dto';
 
 @Injectable()
 export class GizmosService {
@@ -60,6 +61,7 @@ export class GizmosService {
         where: {
           id: params.id,
           user_id: params.userId,
+          categories: params.category,
         },
         orderBy: {
           updated_at: 'desc',
@@ -76,6 +78,16 @@ export class GizmosService {
     return this.prismaService.gizmo.findFirst({
       where: {
         id,
+      },
+    });
+  }
+
+  findByIds(ids: string[]) {
+    return this.prismaService.gizmo.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
       },
     });
   }
@@ -101,5 +113,18 @@ export class GizmosService {
       tags: gizmo.tags.join('|'),
       tools: tools.map((elem) => elem.type).join('|'),
     };
+  }
+
+  count() {
+    return this.prismaService.gizmo.count();
+  }
+
+  top(params: TopGizmosDto) {
+    return this.prismaService.gizmo.findMany({
+      orderBy: {
+        updated_at: 'desc',
+      },
+      take: params.limit,
+    });
   }
 }

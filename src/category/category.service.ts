@@ -45,4 +45,8 @@ export class CategoryService {
       );
     }
   }
+
+  count() {
+    return this.prismaService.category.count();
+  }
 }

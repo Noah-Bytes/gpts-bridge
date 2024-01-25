@@ -16,5 +16,6 @@ import { ChatOpenaiModule } from '../chat-openai/chat-openai.module';
   ],
   controllers: [CategoryController],
   providers: [PrismaService, CategoryService, CategoryJob],
+  exports: [CategoryService],
 })
 export class CategoryModule {}

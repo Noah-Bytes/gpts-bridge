@@ -8,12 +8,17 @@ import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
 import { Gpt } from '../chat-openai/dto/gpt.dto';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { TopGizmosMetricsDto } from './dto/get-gizmo-metrics.dto';
+import { GizmosService } from '../gizmos/gizmos.service';
+import { keyBy } from 'lodash';
+import { YYYYMMDD } from '../utils/Date';
 
 @Injectable()
 export class GizmoMetricsService {
   constructor(
-    private prismaService: PrismaService,
-    private chatOpenaiService: ChatOpenaiService,
+    private readonly prismaService: PrismaService,
+    private readonly chatOpenaiService: ChatOpenaiService,
+    private readonly gizmosService: GizmosService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
@@ -71,8 +76,8 @@ export class GizmoMetricsService {
           user_id: params.userId,
           gizmo_id: params.gizmoId,
           date: {
-            gte: dayjs(params.startDate).toDate(),
-            lte: dayjs(params.endDate).toDate(),
+            gte: params.startDate,
+            lte: params.endDate,
           },
         },
         orderBy: {
@@ -111,5 +116,28 @@ export class GizmoMetricsService {
       ),
       date: dayjs().format('YYYY-MM-DD'),
     };
+  }
+
+  async top(params: TopGizmosMetricsDto) {
+    const list = await this.prismaService.gizmo_metrics.findMany({
+      where: {
+        // date: dayjs().format(YYYYMMDD),
+      },
+      orderBy: {
+        num_conversations_str: 'desc',
+      },
+      take: params.limit,
+    });
+
+    const gizmosList = await this.gizmosService.findByIds(
+      list.map((elem) => elem.gizmo_id),
+    );
+
+    const gizmosMap = keyBy(gizmosList, 'id');
+
+    return list.map((elem) => ({
+      ...elem,
+      gizmos: gizmosMap[elem.gizmo_id],
+    }));
   }
 }

@@ -11,7 +11,11 @@ async function bootstrap() {
   });
 
   app.useGlobalFilters(new HttpExecptionFilter());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new TransformInterceptor())
+
+  app.enableCors({
+    origin: '*',
+  });
 
   app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false }));
 

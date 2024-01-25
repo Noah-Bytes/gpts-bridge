@@ -16,6 +16,7 @@ import { GizmoSearchModule } from '../gizmo-search/gizmo-search.module';
 import { GptsModule } from '../gpts/gpts.module';
 import { LanguageModule } from '../language/language.module';
 import { BullProcessorModule } from '../bull-processor/bull-processor.module';
+import { ReportModule } from '../report/report.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { BullProcessorModule } from '../bull-processor/bull-processor.module';
     GptsModule,
     LanguageModule,
     BullProcessorModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

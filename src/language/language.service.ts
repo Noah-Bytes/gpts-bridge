@@ -55,4 +55,8 @@ export class LanguageService {
       },
     });
   }
+
+  count() {
+    return this.prismaService.language.count();
+  }
 }

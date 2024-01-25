@@ -21,6 +21,7 @@ export class GptsService {
       pageNo: request.pageNo,
       pageSize: request.pageSize,
       userId: request.userId,
+      category: request.category,
     });
 
     const userIds = map(page.data, 'user_id');

@@ -10,6 +10,7 @@ import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
 import { Queue } from 'bull';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { GetTopAuthorDto } from './dto/get-author.dto';
 
 @Injectable()
 export class AuthorService {
@@ -107,5 +108,18 @@ export class AuthorService {
         },
       },
     );
+  }
+
+  count() {
+    return this.prismaService.author.count();
+  }
+
+  top(params: GetTopAuthorDto) {
+    return this.prismaService.author.findMany({
+      orderBy: {
+        gpt_total: 'desc',
+      },
+      take: params.limit
+    })
   }
 }

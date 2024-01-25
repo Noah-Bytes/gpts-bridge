@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { PageAuthorDto } from './dto/page-author.dto';
+import { GetTopAuthorDto } from './dto/get-author.dto';
 
 @Controller('author')
 export class AuthorController {
@@ -23,5 +24,10 @@ export class AuthorController {
     @Body() updateAuthorDto: UpdateAuthorDto,
   ) {
     return this.authorService.update(userId, updateAuthorDto);
+  }
+
+  @Post('top')
+  top(@Body() params: GetTopAuthorDto) {
+    return this.authorService.top(params);
   }
 }
