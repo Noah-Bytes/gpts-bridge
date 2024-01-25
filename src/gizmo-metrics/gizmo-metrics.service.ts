@@ -91,7 +91,7 @@ export class GizmoMetricsService {
     );
   }
 
-  getNumConversationsStr(str: string): number {
+  getNumConversationsStr(str: string): number | null {
     if (str) {
       let result = str.replace('+', '');
       if (result.indexOf('K') > -1) {
@@ -107,12 +107,11 @@ export class GizmoMetricsService {
       return +result;
     }
 
-    return undefined;
+    return null;
   }
 
   formatByGpt(gpt: Gpt): GizmoMetricsModel {
     const { vanity_metrics, author, id } = gpt.gizmo;
-    // @ts-expect-error
     return {
       user_id: author.user_id,
       gizmo_id: id,
