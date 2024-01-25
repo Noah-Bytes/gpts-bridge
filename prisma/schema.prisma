@@ -53,7 +53,7 @@ model gizmo_metrics {
   id                    BigInt  @id @default(autoincrement())
   user_id               String  @db.VarChar(100)
   gizmo_id              String? @db.VarChar(20)
-  num_conversations_str String? @db.VarChar(10)
+  num_conversations_str Int?
   pv                    Int     @default(0)
   date                  String  @db.VarChar(10)
 
