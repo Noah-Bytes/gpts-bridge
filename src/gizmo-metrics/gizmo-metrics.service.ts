@@ -112,6 +112,7 @@ export class GizmoMetricsService {
 
   formatByGpt(gpt: Gpt): GizmoMetricsModel {
     const { vanity_metrics, author, id } = gpt.gizmo;
+    // @ts-ignore
     return {
       user_id: author.user_id,
       gizmo_id: id,
