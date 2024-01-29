@@ -45,10 +45,22 @@ model gizmo {
   tags            String?   @db.VarChar(200)
   tools           String?   @db.VarChar(300)
   language        String?   @db.VarChar(30)
+  conversations   BigInt?   @default(0)
+  uv              BigInt?   @default(0)
+  pv              BigInt?   @default(0)
+  like            BigInt?   @default(0)
+  share           BigInt?   @default(0)
   create_time     DateTime? @default(dbgenerated("(now())")) @db.DateTime(0)
 
   @@index([user_id], map: "gizmo_user_id_index")
   @@index([language], map: "gizmo_language_index")
+  @@index([conversations(sort: Desc)], map: "gizmo_conversations_index")
+  @@index([create_time(sort: Desc)], map: "gizmo_create_time_index")
+  @@index([like(sort: Desc)], map: "gizmo_like_index")
+  @@index([pv(sort: Desc)], map: "gizmo_pv_index")
+  @@index([share(sort: Desc)], map: "gizmo_share_index")
+  @@index([updated_at(sort: Desc)], map: "gizmo_updated_at_index")
+  @@index([uv(sort: Desc)], map: "gizmo_uv_index")
 }
 
 model gizmo_metrics {

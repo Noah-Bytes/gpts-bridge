@@ -21,4 +21,29 @@ export class GizmosController {
   top(@Body() params: TopGizmosMetricsDto) {
     return this.gizmosService.top(params);
   }
+
+  @Get('uv/:id')
+  uv(@Param('id') id: string) {
+    return this.gizmosService.uv(id);
+  }
+
+  @Get('pv/:id')
+  pv(@Param('id') id: string) {
+    return this.gizmosService.pv(id);
+  }
+
+  @Get('like/:id')
+  like(@Param('id') id: string) {
+    return this.gizmosService.like(id);
+  }
+
+  @Get('un_like/:id')
+  unLike(@Param('id') id: string) {
+    return this.gizmosService.unLike(id);
+  }
+
+  @Get('share/:id')
+  share(@Param('id') id: string) {
+    return this.gizmosService.share(id);
+  }
 }

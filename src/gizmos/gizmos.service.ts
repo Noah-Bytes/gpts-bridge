@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import type { gizmo as GizmoModel } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import * as dayjs from 'dayjs';
@@ -10,6 +15,8 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { LanguageService } from '../language/language.service';
 import { TopGizmosDto } from './dto/get-gizmos.dto';
+import { getNumConversationsStr } from '../utils/format';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class GizmosService {
@@ -112,6 +119,10 @@ export class GizmosService {
       updated_at: dayjs(gizmo.updated_at).toDate(),
       tags: gizmo.tags.join('|'),
       tools: JSON.stringify(tools),
+      // @ts-ignore
+      conversations: getNumConversationsStr(
+        gpt.gizmo.vanity_metrics.num_conversations_str,
+      ),
     };
   }
 
@@ -122,9 +133,114 @@ export class GizmosService {
   top(params: TopGizmosDto) {
     return this.prismaService.gizmo.findMany({
       orderBy: {
-        updated_at: 'desc',
+        updated_at: Prisma.SortOrder.desc,
       },
       take: params.limit,
+    });
+  }
+
+  async setConversations(id: string, total: bigint) {
+    const item = await this.findOne(id);
+    if (!item) {
+      throw new ForbiddenException();
+    }
+
+    await this.prismaService.gizmo.update({
+      where: {
+        id,
+      },
+      data: {
+        conversations: total,
+      },
+    });
+  }
+
+  async like(id: string) {
+    const item = await this.findOne(id);
+
+    if (!item) {
+      throw new ForbiddenException();
+    }
+
+    await this.prismaService.gizmo.update({
+      where: {
+        id,
+      },
+      data: {
+        like: item.like + BigInt(1),
+      },
+    });
+  }
+
+  async unLike(id: string) {
+    const item = await this.findOne(id);
+
+    if (!item) {
+      throw new ForbiddenException();
+    }
+
+    if (item.like <= 0) {
+      throw new BadRequestException('not like');
+    }
+
+    await this.prismaService.gizmo.update({
+      where: {
+        id,
+      },
+      data: {
+        like: item.like + BigInt(1),
+      },
+    });
+  }
+
+  async pv(id: string) {
+    const item = await this.findOne(id);
+
+    if (!item) {
+      throw new ForbiddenException();
+    }
+
+    await this.prismaService.gizmo.update({
+      where: {
+        id,
+      },
+      data: {
+        pv: item.pv + BigInt(1),
+      },
+    });
+  }
+
+  async uv(id: string) {
+    const item = await this.findOne(id);
+
+    if (!item) {
+      throw new ForbiddenException();
+    }
+
+    await this.prismaService.gizmo.update({
+      where: {
+        id,
+      },
+      data: {
+        uv: item.uv + BigInt(1),
+      },
+    });
+  }
+
+  async share(id: string) {
+    const item = await this.findOne(id);
+
+    if (!item) {
+      throw new ForbiddenException();
+    }
+
+    await this.prismaService.gizmo.update({
+      where: {
+        id,
+      },
+      data: {
+        uv: item.uv + BigInt(1),
+      },
     });
   }
 }

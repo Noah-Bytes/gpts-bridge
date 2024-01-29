@@ -11,7 +11,8 @@ import { Logger } from 'winston';
 import { TopGizmosMetricsDto } from './dto/get-gizmo-metrics.dto';
 import { GizmosService } from '../gizmos/gizmos.service';
 import { keyBy } from 'lodash';
-import { YYYYMMDD } from '../utils/Date';
+import { YYYYMMDD } from '../utils/date';
+import { getNumConversationsStr } from '../utils/format';
 
 @Injectable()
 export class GizmoMetricsService {
@@ -38,6 +39,14 @@ export class GizmoMetricsService {
           gpt.gizmo.short_url,
         );
         gizmoMetrics = this.formatByGpt(gptByApi);
+
+        // 如果单独获取gpt信息，则根据情况，更新回话数
+        if (gizmoMetrics.num_conversations_str !== undefined) {
+          await this.gizmosService.setConversations(
+            gizmoMetrics.gizmo_id,
+            BigInt(gizmoMetrics.num_conversations_str),
+          );
+        }
       }
 
       if (gizmoMetrics.num_conversations_str) {
@@ -91,32 +100,13 @@ export class GizmoMetricsService {
     );
   }
 
-  getNumConversationsStr(str: string): number | null {
-    if (str) {
-      let result = str.replace('+', '');
-      if (result.indexOf('K') > -1) {
-        result = result.replace('K', '');
-        return +result * 1000;
-      }
-
-      if (result.indexOf('M') > -1) {
-        result = result.replace('M', '');
-        return +result * 1000 * 1000;
-      }
-
-      return +result;
-    }
-
-    return null;
-  }
-
   formatByGpt(gpt: Gpt): GizmoMetricsModel {
     const { vanity_metrics, author, id } = gpt.gizmo;
     // @ts-ignore
     return {
       user_id: author.user_id,
       gizmo_id: id,
-      num_conversations_str: this.getNumConversationsStr(
+      num_conversations_str: getNumConversationsStr(
         vanity_metrics.num_conversations_str,
       ),
       date: dayjs().format('YYYY-MM-DD'),
