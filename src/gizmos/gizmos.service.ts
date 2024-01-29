@@ -111,7 +111,7 @@ export class GizmosService {
         : undefined,
       updated_at: dayjs(gizmo.updated_at).toDate(),
       tags: gizmo.tags.join('|'),
-      tools: tools.map((elem) => elem.type).join('|'),
+      tools: JSON.stringify(tools),
     };
   }
 

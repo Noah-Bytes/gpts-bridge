@@ -32,21 +32,23 @@ model category {
 }
 
 model gizmo {
-  id              String   @id @db.VarChar(20)
-  user_id         String   @db.VarChar(100)
-  name            String?  @db.VarChar(64)
-  image           String?  @db.Text
-  description     String?  @db.VarChar(300)
-  welcome_message String?  @db.VarChar(400)
-  prompt_starters String?  @db.Text
-  short_url       String?  @db.VarChar(100)
-  categories      String?  @db.VarChar(300)
-  updated_at      DateTime @db.DateTime(0)
-  tags            String?  @db.VarChar(200)
-  tools           String?  @db.VarChar(300)
-  language        String?  @db.VarChar(30)
+  id              String    @id @db.VarChar(20)
+  user_id         String    @db.VarChar(100)
+  name            String?   @db.VarChar(64)
+  image           String?   @db.Text
+  description     String?   @db.VarChar(300)
+  welcome_message String?   @db.VarChar(400)
+  prompt_starters String?   @db.Text
+  short_url       String?   @db.VarChar(100)
+  categories      String?   @db.VarChar(300)
+  updated_at      DateTime  @db.DateTime(0)
+  tags            String?   @db.VarChar(200)
+  tools           String?   @db.VarChar(300)
+  language        String?   @db.VarChar(30)
+  create_time     DateTime? @default(dbgenerated("(now())")) @db.DateTime(0)
 
   @@index([user_id], map: "gizmo_user_id_index")
+  @@index([language], map: "gizmo_language_index")
 }
 
 model gizmo_metrics {
