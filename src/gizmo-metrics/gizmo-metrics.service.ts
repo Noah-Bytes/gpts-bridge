@@ -23,8 +23,9 @@ export class GizmoMetricsService {
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
-  async createByGpt(gpt: Gpt) {
-    let gizmoMetrics = this.formatByGpt(gpt);
+  async createYesterdayByGpt(gpt: Gpt) {
+    const yesterday = dayjs().subtract(1, 'days').format(YYYYMMDD);
+    let gizmoMetrics = this.formatByGpt(gpt, yesterday);
     const item = await this.findOne(gizmoMetrics.gizmo_id, gizmoMetrics.date);
     if (!item) {
       /**
@@ -38,7 +39,7 @@ export class GizmoMetricsService {
         const gptByApi = await this.chatOpenaiService.getGizmosByShorUrl(
           gpt.gizmo.short_url,
         );
-        gizmoMetrics = this.formatByGpt(gptByApi);
+        gizmoMetrics = this.formatByGpt(gptByApi, yesterday);
 
         // 如果单独获取gpt信息，则根据情况，更新回话数
         if (gizmoMetrics.num_conversations_str !== undefined) {
@@ -100,7 +101,7 @@ export class GizmoMetricsService {
     );
   }
 
-  formatByGpt(gpt: Gpt): GizmoMetricsModel {
+  formatByGpt(gpt: Gpt, date: string): GizmoMetricsModel {
     const { vanity_metrics, author, id } = gpt.gizmo;
     // @ts-ignore
     return {
@@ -109,14 +110,14 @@ export class GizmoMetricsService {
       num_conversations_str: getNumConversationsStr(
         vanity_metrics.num_conversations_str,
       ),
-      date: dayjs().format('YYYY-MM-DD'),
+      date,
     };
   }
 
   async top(params: TopGizmosMetricsDto) {
     const list = await this.prismaService.gizmo_metrics.findMany({
       where: {
-        date: dayjs().format(YYYYMMDD),
+        date: dayjs().subtract(1, 'days').format(YYYYMMDD),
       },
       orderBy: {
         num_conversations_str: Prisma.SortOrder.desc,

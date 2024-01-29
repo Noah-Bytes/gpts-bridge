@@ -37,7 +37,7 @@ export class GizmoSearchProcessor {
       await this.authorService.createQueueTask(gpt.gizmo.author.user_id);
 
       await this.gizmosService.upsertByGpt(gpt);
-      await this.gizmoMetricsService.createByGpt(gpt);
+      await this.gizmoMetricsService.createYesterdayByGpt(gpt);
     }
 
     return true;

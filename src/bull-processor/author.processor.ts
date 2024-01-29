@@ -43,7 +43,7 @@ export class AuthorProcessor {
       // 更新gpt信息
       await this.gizmosService.upsertByGpt(gpt);
       // 更新数据
-      await this.gizmoMetricsService.createByGpt(gpt);
+      await this.gizmoMetricsService.createYesterdayByGpt(gpt);
 
       // 创建搜索任务
       await this.gizmoSearchService.createQueueTask(gpt.gizmo.display.name);
