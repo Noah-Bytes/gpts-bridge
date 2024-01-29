@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateAuthorDto } from './dto/update-author.dto';
-import type { author as AuthorModel } from '@prisma/client';
+import { author as AuthorModel, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import { PageAuthorDto } from './dto/page-author.dto';
 import { paginate } from '../utils/page';
@@ -45,7 +45,7 @@ export class AuthorService {
           user_id: params.userId,
         },
         orderBy: {
-          create_time: 'desc',
+          create_time: Prisma.SortOrder.desc,
         },
       },
       {
@@ -117,7 +117,7 @@ export class AuthorService {
   top(params: GetTopAuthorDto) {
     return this.prismaService.author.findMany({
       orderBy: {
-        gpt_total: 'desc',
+        gpt_total: Prisma.SortOrder.desc,
       },
       take: params.limit
     })

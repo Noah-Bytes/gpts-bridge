@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { gizmo_metrics as GizmoMetricsModel } from '@prisma/client';
+import { gizmo_metrics as GizmoMetricsModel, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import * as dayjs from 'dayjs';
 import { PageGizmoMetricsDto } from './dto/page-gizmo-metrics.dto';
@@ -90,7 +90,7 @@ export class GizmoMetricsService {
           },
         },
         orderBy: {
-          date: 'desc',
+          date: Prisma.SortOrder.desc,
         },
       },
       {
@@ -119,7 +119,7 @@ export class GizmoMetricsService {
         date: dayjs().format(YYYYMMDD),
       },
       orderBy: {
-        num_conversations_str: 'desc',
+        num_conversations_str: Prisma.SortOrder.desc,
       },
       take: params.limit,
     });

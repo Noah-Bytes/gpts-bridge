@@ -71,7 +71,7 @@ export class GizmosService {
           categories: params.category,
         },
         orderBy: {
-          updated_at: 'desc',
+          updated_at: Prisma.SortOrder.desc,
         },
       },
       {
