@@ -7,6 +7,7 @@ import { AuthorModule } from '../author/author.module';
 import { GizmoSearchModule } from '../gizmo-search/gizmo-search.module';
 import { GizmoMetricsModule } from '../gizmo-metrics/gizmo-metrics.module';
 import { GizmoSearchProcessor } from './gizmo-search.processor';
+import { BullProcessorController } from './bull-processor.controller';
 
 @Module({
   imports: [
@@ -17,5 +18,6 @@ import { GizmoSearchProcessor } from './gizmo-search.processor';
     GizmoMetricsModule,
   ],
   providers: [AuthorProcessor, CategoryProcessor, GizmoSearchProcessor],
+  controllers: [BullProcessorController],
 })
 export class BullProcessorModule {}

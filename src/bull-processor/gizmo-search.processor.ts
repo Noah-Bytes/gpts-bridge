@@ -20,9 +20,17 @@ export class GizmoSearchProcessor {
   ) {}
 
   @Process(CHAT_GPTS_SYNC.jobs.query)
-  async handleGPTsBySearch(job: Job) {
+  async handleGPTsBySearchOnJob(job: Job) {
     const { query } = job.data;
+    await this.syncGPTsBySearch(query);
+  }
 
+  async syncGPTsByQueries(queries: string[]) {
+    for (let i = 0; i < queries.length; i++) {
+      await this.syncGPTsBySearch(queries[i]);
+    }
+  }
+  async syncGPTsBySearch(query: string) {
     this.logger.info('【搜索维度同步】开始同步 %s', query);
     const { items } = await this.chatOpenaiService.getGizmosByQuery(query);
     this.logger.info(

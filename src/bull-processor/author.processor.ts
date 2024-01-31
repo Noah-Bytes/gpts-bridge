@@ -22,9 +22,11 @@ export class AuthorProcessor {
   ) {}
 
   @Process(CHAT_GPTS_SYNC.jobs.userId)
-  async handleGPTsByUserId(job: Job) {
+  async handleGPTsByUserIdOnJob(job: Job) {
     const { userId } = job.data;
-
+    await this.syncGPTsByUserId(userId);
+  }
+  async syncGPTsByUserId(userId: string) {
     this.logger.info('【用户维度同步】开始同步%s', userId);
     const { items } = await this.chatOpenaiService.getGizmosByUser(userId);
     this.logger.info(

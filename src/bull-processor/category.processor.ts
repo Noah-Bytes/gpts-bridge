@@ -23,16 +23,18 @@ export class CategoryProcessor {
   ) {}
 
   @Process(CHAT_GPTS_SYNC.jobs.category)
-  async handleGPTsByCategory(job: Job) {
+  async handleGPTsByCategoryOnJob(job: Job) {
     const { key } = job.data;
-
+    await this.syncGPTsByCategory(key);
+  }
+  async syncGPTsByCategory(id: string) {
     let cursor = 0;
     const limit = 10;
     const gpts: Gpt[] = [];
     let lastResp;
     do {
       lastResp = await this.chatOpenaiService.getGizmosByCategory({
-        key,
+        key: id,
         cursor,
         limit,
       });
@@ -47,7 +49,7 @@ export class CategoryProcessor {
 
       this.logger.info(
         '【类目维度同步】 %s, cursor: %s 获取gpts个数 %s',
-        key,
+        id,
         cursor,
         lastResp.list.items.length,
       );
@@ -61,7 +63,7 @@ export class CategoryProcessor {
 
     this.logger.info(
       '【类目维度同步】 %s, 总共获取gpts个数 %s',
-      key,
+      id,
       gpts.length,
     );
 
