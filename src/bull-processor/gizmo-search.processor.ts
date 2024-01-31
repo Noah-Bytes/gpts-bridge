@@ -22,7 +22,10 @@ export class GizmoSearchProcessor {
   @Process(CHAT_GPTS_SYNC.jobs.query)
   async handleGPTsBySearchOnJob(job: Job) {
     const { query } = job.data;
-    await this.syncGPTsBySearch(query);
+    const queries = query.split(' ');
+    for (let i = 0; i < queries.length; i++) {
+      await this.syncGPTsBySearch(queries[i]);
+    }
   }
 
   async syncGPTsByQueries(queries: string[]) {
