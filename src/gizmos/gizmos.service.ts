@@ -57,6 +57,7 @@ export class GizmosService {
         create: gizmos,
       });
     } catch (e) {
+      this.logger.error(gpt);
       this.logger.error(e);
     }
   }
