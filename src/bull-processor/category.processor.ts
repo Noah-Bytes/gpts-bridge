@@ -69,6 +69,11 @@ export class CategoryProcessor {
 
     for (let i = 0; i < gpts.length; i++) {
       const gpt = gpts[i];
+
+      if (!gpt.gizmo?.display?.categories) {
+        gpt.gizmo.display.categories = [id];
+      }
+
       // 更新作者并且创建userId任务
       await this.authorService.upsertByGpt(gpt);
       await this.authorService.createQueueTask(gpt.gizmo.author.user_id);
