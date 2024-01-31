@@ -119,7 +119,7 @@ export class AuthorService {
       orderBy: {
         gpt_total: Prisma.SortOrder.desc,
       },
-      take: params.limit
-    })
+      take: params.limit,
+    });
   }
 }

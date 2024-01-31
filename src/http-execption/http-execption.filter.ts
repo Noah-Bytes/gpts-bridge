@@ -14,8 +14,6 @@ export class HttpExecptionFilter<T> implements ExceptionFilter {
 
     const message = exception.message || 'Service Error';
 
-    console.log(status);
-
     response.status(status).json({
       success: false,
       message,

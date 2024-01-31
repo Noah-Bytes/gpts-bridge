@@ -44,6 +44,9 @@ export class CategoryService {
         },
       );
     }
+    return {
+      total: list.length,
+    };
   }
 
   count() {
