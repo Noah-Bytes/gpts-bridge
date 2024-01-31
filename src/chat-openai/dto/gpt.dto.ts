@@ -18,6 +18,7 @@ export class Gizmo {
   display: Display;
   share_recipient: string;
   updated_at: string;
+  created_at: string;
   last_interacted_at: any;
   tags: string[];
   version: any;

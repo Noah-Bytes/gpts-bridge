@@ -47,7 +47,7 @@ export class ChatOpenaiService {
   ): Promise<DiscoveryEntity> {
     const { data: resp } = await this.httpService.axiosRef({
       method: 'get',
-      url: `https://chat.openai.com/public-api/gizmos/${listByCategoryDto.key}?cursor=${listByCategoryDto.cursor}&limit=${listByCategoryDto.limit}&locale=${listByCategoryDto?.locale || 'global'}`,
+      url: `https://chat.openai.com/public-api/gizmos/discovery/${listByCategoryDto.key}?cursor=${listByCategoryDto.cursor}&limit=${listByCategoryDto.limit}&locale=${listByCategoryDto?.locale || 'global'}`,
       headers: {
         authority: 'chat.openai.com',
         referer: 'https://chat.openai.com/gpts',

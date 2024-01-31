@@ -117,6 +117,7 @@ export class GizmosService {
         ? gizmo.display.categories.join('|')
         : undefined,
       updated_at: dayjs(gizmo.updated_at).toDate(),
+      create_time: dayjs(gizmo.created_at).toDate(),
       tags: gizmo.tags.join('|'),
       tools: JSON.stringify(tools),
       // @ts-ignore
