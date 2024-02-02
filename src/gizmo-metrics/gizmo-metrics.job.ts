@@ -16,14 +16,12 @@ export class GizmoMetricsJob {
     private readonly gizmosService: GizmosService,
     private readonly chatOpenaiService: ChatOpenaiService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-  ) {
-    this.repair().then();
-  }
+  ) {}
 
   /**
    * 补漏逻辑
    */
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_DAY_AT_3AM)
   async repair() {
     if (isDev()) {
       return;
@@ -61,7 +59,7 @@ export class GizmoMetricsJob {
           );
           await this.gizmoMetricsService.createByGpt(gpt, date);
         } catch (e) {
-          this.logger.error(e);
+          this.logger.error(e, e.message);
           continue;
         }
         hadUpdateTotal++;

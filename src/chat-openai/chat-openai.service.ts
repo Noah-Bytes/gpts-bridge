@@ -35,8 +35,13 @@ export class ChatOpenaiService {
       },
     });
 
+    /**
+     * {
+     *     "detail": "Agent not found"
+     * }
+     */
     if (resp.default) {
-      throw new NotFoundException(resp.default);
+      throw new NotFoundException(`${shortUrl} ${resp.default}`);
     }
 
     return resp;
