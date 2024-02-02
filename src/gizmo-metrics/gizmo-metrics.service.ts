@@ -60,6 +60,15 @@ export class GizmoMetricsService {
 
   async createByGpt(gpt: Gpt, date: string) {
     const gizmoMetrics = this.formatByGpt(gpt, date);
+
+    // 如果单独获取gpt信息，则根据情况，更新回话数
+    if (gizmoMetrics.num_conversations_str !== undefined) {
+      await this.gizmosService.setConversations(
+        gizmoMetrics.gizmo_id,
+        BigInt(gizmoMetrics.num_conversations_str),
+      );
+    }
+
     await this.prismaService.gizmo_metrics.create({
       data: gizmoMetrics,
     });

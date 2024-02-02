@@ -57,10 +57,7 @@ export class GizmoMetricsJob {
         const gpt = await this.chatOpenaiService.getGizmosByShorUrl(
           temp.short_url,
         );
-        await this.gizmosService.setConversations(
-          gpt.gizmo.id,
-          BigInt(gpt.gizmo.vanity_metrics.num_conversations_str),
-        );
+
         await this.gizmoMetricsService.createByGpt(gpt, date);
       }
 
