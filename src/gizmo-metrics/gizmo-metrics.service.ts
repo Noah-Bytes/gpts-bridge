@@ -26,7 +26,7 @@ export class GizmoMetricsService {
   async createYesterdayByGpt(gpt: Gpt) {
     const yesterday = dayjs().subtract(1, 'days').format(YYYYMMDD);
     let gizmoMetrics = this.formatByGpt(gpt, yesterday);
-    const item = await this.findOne(gizmoMetrics.gizmo_id, gizmoMetrics.date);
+    const item = await this.findOne(gizmoMetrics.gizmo_id, yesterday);
     if (!item) {
       /**
        * 如果 num_conversations_str 不存在，则调用一次 gpt单个接口
@@ -40,17 +40,14 @@ export class GizmoMetricsService {
           gpt.gizmo.short_url,
         );
         gizmoMetrics = this.formatByGpt(gptByApi, yesterday);
-
-        // 如果单独获取gpt信息，则根据情况，更新回话数
-        if (gizmoMetrics.num_conversations_str !== undefined) {
-          await this.gizmosService.setConversations(
-            gizmoMetrics.gizmo_id,
-            BigInt(gizmoMetrics.num_conversations_str),
-          );
-        }
       }
 
       if (gizmoMetrics.num_conversations_str) {
+        // 如果单独获取gpt信息，则根据情况，更新回话数
+        await this.gizmosService.setConversations(
+          gizmoMetrics.gizmo_id,
+          BigInt(gizmoMetrics.num_conversations_str),
+        );
         await this.prismaService.gizmo_metrics.create({
           data: gizmoMetrics,
         });
@@ -119,13 +116,12 @@ export class GizmoMetricsService {
 
   formatByGpt(gpt: Gpt, date: string): GizmoMetricsModel {
     const { vanity_metrics, author, id } = gpt.gizmo;
+    const num = getNumConversationsStr(vanity_metrics.num_conversations_str);
     // @ts-ignore
     return {
       user_id: author?.user_id,
       gizmo_id: id,
-      num_conversations_str: getNumConversationsStr(
-        vanity_metrics.num_conversations_str,
-      ),
+      num_conversations_str: isNaN(num) ? undefined : num,
       date,
     };
   }

@@ -102,6 +102,9 @@ export class GizmosService {
 
   formatByGpt(gpt: Gpt): GizmoModel {
     const { gizmo, tools } = gpt;
+    const num = getNumConversationsStr(
+      gpt.gizmo.vanity_metrics.num_conversations_str,
+    );
     // @ts-ignore
     return {
       id: gizmo.id,
@@ -122,9 +125,7 @@ export class GizmosService {
       tags: gizmo.tags.join('|'),
       tools: JSON.stringify(tools),
       // @ts-ignore
-      conversations: getNumConversationsStr(
-        gpt.gizmo.vanity_metrics.num_conversations_str,
-      ),
+      conversations: isNaN(num) ? undefined : num,
     };
   }
 
