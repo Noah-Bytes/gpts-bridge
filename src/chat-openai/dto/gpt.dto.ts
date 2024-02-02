@@ -3,6 +3,7 @@ export class Gpt {
   tools: Tool[];
   files: File[];
   product_features: ProductFeatures;
+  detail?: string;
 }
 
 export class Gizmo {

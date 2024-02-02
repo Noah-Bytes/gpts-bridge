@@ -55,11 +55,15 @@ export class GizmoMetricsJob {
           continue;
         }
 
-        const gpt = await this.chatOpenaiService.getGizmosByShorUrl(
-          temp.short_url,
-        );
-
-        await this.gizmoMetricsService.createByGpt(gpt, date);
+        try {
+          const gpt = await this.chatOpenaiService.getGizmosByShorUrl(
+            temp.short_url,
+          );
+          await this.gizmoMetricsService.createByGpt(gpt, date);
+        } catch (e) {
+          this.logger.error(e);
+          continue;
+        }
         hadUpdateTotal++;
       }
 

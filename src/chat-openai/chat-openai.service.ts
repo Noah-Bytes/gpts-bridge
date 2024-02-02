@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { ListByCategoryDto } from './dto/list.dto';
@@ -34,6 +34,10 @@ export class ChatOpenaiService {
         authorization: this.authorization,
       },
     });
+
+    if (resp.default) {
+      throw new NotFoundException(resp.default);
+    }
 
     return resp;
   }
