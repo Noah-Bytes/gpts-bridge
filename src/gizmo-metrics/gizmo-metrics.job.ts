@@ -4,7 +4,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { GizmosService } from '../gizmos/gizmos.service';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { YYYYMMDD } from '../utils/date';
 import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
 import { isDev } from '../utils/env';
