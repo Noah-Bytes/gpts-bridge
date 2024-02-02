@@ -58,6 +58,13 @@ export class GizmoMetricsService {
     }
   }
 
+  async createByGpt(gpt: Gpt, date: string) {
+    const gizmoMetrics = this.formatByGpt(gpt, date);
+    await this.prismaService.gizmo_metrics.create({
+      data: gizmoMetrics,
+    });
+  }
+
   findOne(gizmo_id: string, date: string) {
     return this.prismaService.gizmo_metrics.findFirst({
       where: {
@@ -105,7 +112,7 @@ export class GizmoMetricsService {
     const { vanity_metrics, author, id } = gpt.gizmo;
     // @ts-ignore
     return {
-      user_id: author.user_id,
+      user_id: author?.user_id,
       gizmo_id: id,
       num_conversations_str: getNumConversationsStr(
         vanity_metrics.num_conversations_str,

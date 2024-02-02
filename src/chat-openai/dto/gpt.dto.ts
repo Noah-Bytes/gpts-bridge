@@ -9,7 +9,7 @@ export class Gizmo {
   id: string;
   organization_id: string;
   short_url: string;
-  author: Author;
+  author?: Author;
   voice: Voice;
   workspace_id: any;
   model: any;

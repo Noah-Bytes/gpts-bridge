@@ -34,6 +34,7 @@ export class GizmoMetricsJob {
       hadTotal = 0;
 
     const pageSize = 100;
+    const date = dayjs().subtract(1, 'days').format(YYYYMMDD);
 
     do {
       const page = await this.gizmosService.page({
@@ -47,19 +48,20 @@ export class GizmoMetricsJob {
 
       for (let i = 0; i < page.data.length; i++) {
         const temp = page.data[i];
-        const metrics = await this.gizmoMetricsService.findOne(
-          temp.id,
-          dayjs().subtract(1, 'days').format(YYYYMMDD),
-        );
+        const metrics = await this.gizmoMetricsService.findOne(temp.id, date);
 
         if (metrics) {
           continue;
         }
 
-        const gizmos = await this.chatOpenaiService.getGizmosByShorUrl(
+        const gpt = await this.chatOpenaiService.getGizmosByShorUrl(
           temp.short_url,
         );
-        await this.gizmoMetricsService.createYesterdayByGpt(gizmos);
+        await this.gizmosService.setConversations(
+          gpt.gizmo.id,
+          BigInt(gpt.gizmo.vanity_metrics.num_conversations_str),
+        );
+        await this.gizmoMetricsService.createByGpt(gpt, date);
       }
 
       hadTotal += page.data.length;
