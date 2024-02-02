@@ -32,7 +32,7 @@ export class GizmoMetricsJob {
       hadTotal = 0,
       hadUpdateTotal = 0;
 
-    const pageSize = 100;
+    const pageSize = 1000;
     const date = dayjs().subtract(1, 'days').format(YYYYMMDD);
 
     do {
