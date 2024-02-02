@@ -31,7 +31,8 @@ export class GizmoMetricsJob {
 
     let pageNo = 1,
       total = 0,
-      hadTotal = 0;
+      hadTotal = 0,
+      hadUpdateTotal = 0;
 
     const pageSize = 100;
     const date = dayjs().subtract(1, 'days').format(YYYYMMDD);
@@ -59,16 +60,18 @@ export class GizmoMetricsJob {
         );
 
         await this.gizmoMetricsService.createByGpt(gpt, date);
+        hadUpdateTotal++;
       }
 
       hadTotal += page.data.length;
       total = page.meta.total;
 
       this.logger.info(
-        '检测gpts是否今日更新，总共%s个，已检查%s个，当前第%s页',
+        '检测gpts是否今日更新，总共%s个，已检查%s个，当前第%s页，已补漏%s个',
         total,
         hadTotal,
         pageNo,
+        hadUpdateTotal,
       );
 
       pageNo++;
