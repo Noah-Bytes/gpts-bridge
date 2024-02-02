@@ -16,7 +16,9 @@ export class GizmoMetricsJob {
     private readonly gizmosService: GizmosService,
     private readonly chatOpenaiService: ChatOpenaiService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-  ) {}
+  ) {
+    this.repair().then();
+  }
 
   /**
    * 补漏逻辑
