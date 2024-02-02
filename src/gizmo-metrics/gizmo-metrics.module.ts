@@ -6,7 +6,7 @@ import { ChatOpenaiModule } from '../chat-openai/chat-openai.module';
 import { GizmosModule } from '../gizmos/gizmos.module';
 
 @Module({
-  imports: [ChatOpenaiModule, GizmosModule ],
+  imports: [ChatOpenaiModule, GizmosModule],
   controllers: [GizmoMetricsController],
   providers: [PrismaService, GizmoMetricsService],
   exports: [GizmoMetricsService],

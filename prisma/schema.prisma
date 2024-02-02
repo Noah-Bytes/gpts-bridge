@@ -15,8 +15,8 @@ model author {
   is_verified                 Boolean?
   will_receive_support_emails Boolean?
   gpt_total                   Int?
-  create_time                 DateTime? @default(now()) @db.DateTime(0)
-  upt_time                    DateTime? @default(now()) @db.DateTime(0)
+  create_time                 DateTime @default(now()) @db.DateTime(0)
+  upt_time                    DateTime @default(now()) @db.DateTime(0)
 }
 
 model category {
@@ -27,7 +27,7 @@ model category {
   display_type  String?  @db.VarChar(10)
   display_group String?  @db.VarChar(30)
   locale        String?  @db.VarChar(10)
-  create_time   DateTime @default(dbgenerated("(now())")) @db.DateTime(0)
+  create_time   DateTime @default(now()) @db.DateTime(0)
   upt_time      DateTime @default(now()) @db.DateTime(0)
 }
 
@@ -50,7 +50,7 @@ model gizmo {
   pv              BigInt?   @default(0)
   like            BigInt?   @default(0)
   share           BigInt?   @default(0)
-  create_time     DateTime? @default(dbgenerated("(now())")) @db.DateTime(0)
+  create_time     DateTime @default(now()) @db.DateTime(0)
 
   @@index([user_id], map: "gizmo_user_id_index")
   @@index([language], map: "gizmo_language_index")
@@ -77,5 +77,5 @@ model gizmo_metrics {
 
 model language {
   id          String    @id @db.VarChar(30)
-  create_time DateTime? @default(dbgenerated("'now()'")) @db.DateTime(0)
+  create_time DateTime? @default(now()) @db.DateTime(0)
 }

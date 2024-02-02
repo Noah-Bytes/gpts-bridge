@@ -12,7 +12,9 @@
     "start:dev": "export NODE_ENV=development&& nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "export NODE_ENV=production&& node dist/main",
-    "db:pull": "dotenv -e .env.development -- prisma db pull",
+    "db:pull:dev": "dotenv -e .env.development -- prisma db pull",
+    "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
+    "deploy:dev": "dotenv -e .env.development -- prisma migrate deploy",
     "postinstall": "npx prisma generate"
   },
   "dependencies": {
