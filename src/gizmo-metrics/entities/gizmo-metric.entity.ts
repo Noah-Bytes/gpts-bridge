@@ -20,7 +20,6 @@ export class GizmoMetric implements GizmoMetricsModel {
   gizmos?: Gizmo;
 
   constructor(partial: Partial<GizmoMetric>) {
-    console.log(partial);
     Object.assign(this, partial);
   }
 }
