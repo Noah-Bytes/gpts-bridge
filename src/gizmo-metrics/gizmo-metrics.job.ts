@@ -10,7 +10,7 @@ import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
 import { isDev } from '../utils/env';
 import { GizmoStatus } from '../enums/GizmoStatus';
 import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
-import * as delay from 'delay';
+import { setTimeout } from 'node:timers/promises';
 
 @Injectable()
 export class GizmoMetricsJob {
@@ -70,7 +70,7 @@ export class GizmoMetricsJob {
           );
           await this.gizmosService.upsertByGpt(gpt);
           await this.gizmoMetricsService.createByGpt(gpt, date);
-          await delay(CHAT_GPTS_SYNC.jobs.repair.delay.success);
+          await setTimeout(CHAT_GPTS_SYNC.jobs.repair.delay.success);
         } catch (e) {
           this.logger.error(e, e.message);
           if (e.message.indexOf('status code 404') > -1) {

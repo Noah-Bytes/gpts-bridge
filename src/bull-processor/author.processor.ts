@@ -9,7 +9,7 @@ import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { AuthorService } from '../author/author.service';
-import delay from 'delay';
+import { setTimeout } from 'node:timers/promises';
 
 @Processor(CHAT_GPTS_SYNC.name)
 export class AuthorProcessor {
@@ -27,9 +27,9 @@ export class AuthorProcessor {
     const { userId } = job.data;
     try {
       await this.syncGPTsByUserId(userId);
-      await delay(CHAT_GPTS_SYNC.jobs.userId.delay.success);
+      await setTimeout(CHAT_GPTS_SYNC.jobs.userId.delay.success);
     } catch (e) {
-      await delay(CHAT_GPTS_SYNC.jobs.userId.delay.exception);
+      await setTimeout(CHAT_GPTS_SYNC.jobs.userId.delay.exception);
       throw e;
     }
   }
