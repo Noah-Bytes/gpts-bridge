@@ -10,7 +10,7 @@ import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
 import { isDev } from '../utils/env';
 import { GizmoStatus } from '../enums/GizmoStatus';
 import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
-import delay from 'delay';
+import * as delay from 'delay';
 
 @Injectable()
 export class GizmoMetricsJob {

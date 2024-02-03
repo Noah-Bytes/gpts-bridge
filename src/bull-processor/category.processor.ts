@@ -10,7 +10,7 @@ import { GizmoSearchService } from '../gizmo-search/gizmo-search.service';
 import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import delay from 'delay';
+import * as delay from 'delay';
 
 @Processor(CHAT_GPTS_SYNC.name)
 export class CategoryProcessor {
