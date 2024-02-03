@@ -9,6 +9,7 @@ import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { AuthorService } from '../author/author.service';
+import delay from 'delay';
 
 @Processor(CHAT_GPTS_SYNC.name)
 export class AuthorProcessor {
@@ -24,7 +25,13 @@ export class AuthorProcessor {
   @Process(CHAT_GPTS_SYNC.jobs.userId)
   async handleGPTsByUserIdOnJob(job: Job) {
     const { userId } = job.data;
-    await this.syncGPTsByUserId(userId);
+    try {
+      await this.syncGPTsByUserId(userId);
+      await delay(CHAT_GPTS_SYNC.jobs.userId.delay.success);
+    } catch (e) {
+      await delay(CHAT_GPTS_SYNC.jobs.userId.delay.exception);
+      throw e;
+    }
   }
   async syncGPTsByUserId(userId: string) {
     this.logger.info('【用户维度同步】开始同步%s', userId);

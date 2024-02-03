@@ -32,14 +32,14 @@ export class CategoryService {
       const item = list[i];
       this.logger.info('【队列】生成 %s 任务', item.id);
       await this.gtpSyncQueue.add(
-        CHAT_GPTS_SYNC.jobs.category,
+        CHAT_GPTS_SYNC.jobs.category.name,
         {
           key: item.key,
         },
         {
           jobId: item.key,
           repeat: {
-            cron: '0 0 * * *',
+            cron: CHAT_GPTS_SYNC.jobs.category.repeatCron,
           },
         },
       );

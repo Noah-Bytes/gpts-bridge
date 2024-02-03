@@ -10,6 +10,7 @@ import { GizmoSearchService } from '../gizmo-search/gizmo-search.service';
 import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import delay from 'delay';
 
 @Processor(CHAT_GPTS_SYNC.name)
 export class CategoryProcessor {
@@ -26,6 +27,7 @@ export class CategoryProcessor {
   async handleGPTsByCategoryOnJob(job: Job) {
     const { key } = job.data;
     await this.syncGPTsByCategory(key);
+    await delay(CHAT_GPTS_SYNC.jobs.category.delay.success);
   }
   async syncGPTsByCategory(id: string) {
     let cursor = 0;

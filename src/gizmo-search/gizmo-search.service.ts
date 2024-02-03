@@ -14,14 +14,14 @@ export class GizmoSearchService {
 
   async createQueueTask(query: string) {
     await this.gtpSyncQueue.add(
-      CHAT_GPTS_SYNC.jobs.query,
+      CHAT_GPTS_SYNC.jobs.query.name,
       {
         query,
       },
       {
         jobId: query,
         repeat: {
-          cron: '20 0 * * *',
+          cron: CHAT_GPTS_SYNC.jobs.query.repeatCron,
         },
       },
     );

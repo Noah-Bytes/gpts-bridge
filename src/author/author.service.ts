@@ -97,14 +97,14 @@ export class AuthorService {
 
   async createQueueTask(userId: string) {
     await this.gtpSyncQueue.add(
-      CHAT_GPTS_SYNC.jobs.userId,
+      CHAT_GPTS_SYNC.jobs.userId.name,
       {
         userId,
       },
       {
         jobId: userId,
         repeat: {
-          cron: '0 1 * * *',
+          cron: CHAT_GPTS_SYNC.jobs.userId.repeatCron,
         },
       },
     );

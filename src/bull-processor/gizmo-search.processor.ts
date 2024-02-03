@@ -8,6 +8,7 @@ import { GizmoMetricsService } from '../gizmo-metrics/gizmo-metrics.service';
 import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import delay from 'delay';
 
 @Processor(CHAT_GPTS_SYNC.name)
 export class GizmoSearchProcessor {
@@ -24,7 +25,13 @@ export class GizmoSearchProcessor {
     const { query } = job.data;
     const queries = query.split(' ');
     for (let i = 0; i < queries.length; i++) {
-      await this.syncGPTsBySearch(queries[i]);
+      try {
+        await this.syncGPTsBySearch(queries[i]);
+        await delay(CHAT_GPTS_SYNC.jobs.query.delay.success);
+      } catch (e) {
+        await delay(CHAT_GPTS_SYNC.jobs.query.delay.exception);
+        throw e;
+      }
     }
   }
 

@@ -2,13 +2,15 @@ import { GizmoMetricsService } from './gizmo-metrics.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { GizmosService } from '../gizmos/gizmos.service';
 import * as dayjs from 'dayjs';
 import { YYYYMMDD } from '../utils/date';
 import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
 import { isDev } from '../utils/env';
 import { GizmoStatus } from '../enums/GizmoStatus';
+import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
+import delay from 'delay';
 
 @Injectable()
 export class GizmoMetricsJob {
@@ -21,8 +23,9 @@ export class GizmoMetricsJob {
 
   /**
    * 补漏逻辑
+   * 每天的凌晨3点、上午7点、中午11点、下午3点和晚上7点各执行一次。
    */
-  @Cron(CronExpression.EVERY_DAY_AT_3AM)
+  @Cron(CHAT_GPTS_SYNC.jobs.repair.repeatCron)
   async repair() {
     if (isDev()) {
       return;
@@ -67,12 +70,15 @@ export class GizmoMetricsJob {
           );
           await this.gizmosService.upsertByGpt(gpt);
           await this.gizmoMetricsService.createByGpt(gpt, date);
+          await delay(CHAT_GPTS_SYNC.jobs.repair.delay.success);
         } catch (e) {
           this.logger.error(e, e.message);
-          await this.gizmosService.update(temp.id, {
-            status: GizmoStatus.DELETED,
-          });
-          continue;
+          if (e.message.indexOf('status code 404') > -1) {
+            await this.gizmosService.update(temp.id, {
+              status: GizmoStatus.DELETED,
+            });
+            continue;
+          }
         }
         hadUpdateTotal++;
       }
