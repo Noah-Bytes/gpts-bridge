@@ -141,10 +141,19 @@ export class GizmosService {
     return this.prismaService.gizmo.count();
   }
 
-  top(params: TopGizmosDto) {
+  topForUpdate(params: TopGizmosDto) {
     return this.prismaService.gizmo.findMany({
       orderBy: {
         updated_at: Prisma.SortOrder.desc,
+      },
+      take: params.limit,
+    });
+  }
+
+  topForNewest(params: TopGizmosDto) {
+    return this.prismaService.gizmo.findMany({
+      orderBy: {
+        create_time: Prisma.SortOrder.desc,
       },
       take: params.limit,
     });

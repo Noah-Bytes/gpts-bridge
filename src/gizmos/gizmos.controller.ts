@@ -33,9 +33,16 @@ export class GizmosController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @Post('top')
-  async top(@Body() params: TopGizmosMetricsDto): Promise<Gizmo[]> {
-    const source = await this.gizmosService.top(params);
+  @Post('top_update')
+  async topForUpdate(@Body() params: TopGizmosMetricsDto): Promise<Gizmo[]> {
+    const source = await this.gizmosService.topForUpdate(params);
+    return source.map((elem) => new Gizmo(elem));
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Post('top_newest')
+  async topForNewest(@Body() params: TopGizmosMetricsDto): Promise<Gizmo[]> {
+    const source = await this.gizmosService.topForNewest(params);
     return source.map((elem) => new Gizmo(elem));
   }
 
