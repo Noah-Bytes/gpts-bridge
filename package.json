@@ -34,6 +34,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dayjs": "^1.11.10",
+    "hashids": "^2.3.0",
     "lodash": "^4.17.21",
     "nest-winston": "^1.9.4",
     "node-nlp": "^4.27.0",

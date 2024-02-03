@@ -17,14 +17,15 @@ import { LanguageService } from '../language/language.service';
 import { TopGizmosDto } from './dto/get-gizmos.dto';
 import { getNumConversationsStr } from '../utils/format';
 import { Prisma } from '@prisma/client';
+import { GizmosModule } from './gizmos.module';
 
 @Injectable()
 export class GizmosService {
   userAgent: string;
   constructor(
-    private configService: ConfigService,
-    private prismaService: PrismaService,
-    private languageService: LanguageService,
+    private readonly configService: ConfigService,
+    private readonly prismaService: PrismaService,
+    private readonly languageService: LanguageService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {
     this.userAgent = this.configService.get<string>('PC_USER_AGENT');
@@ -35,12 +36,11 @@ export class GizmosService {
     try {
       const old = await this.findOne(gizmos.id);
 
+      //  start 处理语言
       if (!old || !old.language) {
         try {
-          gizmos.language = this.languageService.guess(
-            gizmos.name,
-            1,
-          )[0].language;
+          const text = gizmos.name || gizmos.description;
+          gizmos.language = this.languageService.guess(text, 1)[0].language;
           await this.languageService.create({
             id: gizmos.language,
           });
@@ -48,6 +48,7 @@ export class GizmosService {
           gizmos.language = 'unknown';
         }
       }
+      // end
 
       await this.prismaService.gizmo.upsert({
         where: {
@@ -57,9 +58,17 @@ export class GizmosService {
         create: gizmos,
       });
     } catch (e) {
-      this.logger.error(gpt);
-      this.logger.error(e);
+      this.logger.error(e, gpt.gizmo.id);
     }
+  }
+
+  update(id: string, gizmos: Partial<GizmosModule>) {
+    return this.prismaService.gizmo.update({
+      where: {
+        id,
+      },
+      data: gizmos,
+    });
   }
 
   page(params: PageGizmosDto) {
@@ -105,7 +114,6 @@ export class GizmosService {
     const num = getNumConversationsStr(
       gpt.gizmo.vanity_metrics.num_conversations_str,
     );
-    // @ts-ignore
     return {
       id: gizmo.id,
       user_id: gizmo.author.user_id,

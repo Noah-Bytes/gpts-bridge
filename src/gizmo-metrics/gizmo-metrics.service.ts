@@ -51,6 +51,11 @@ export class GizmoMetricsService {
         await this.prismaService.gizmo_metrics.create({
           data: gizmoMetrics,
         });
+      } else {
+        this.logger.info(
+          '主动同步数据出错 %s num_conversations_str无值',
+          gizmoMetrics.gizmo_id,
+        );
       }
     }
   }

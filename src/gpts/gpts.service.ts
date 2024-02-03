@@ -5,8 +5,6 @@ import { GizmoMetricsService } from '../gizmo-metrics/gizmo-metrics.service';
 import { GptsGptDot } from './dto/gpts-gpt.dot';
 import { keyBy } from 'lodash';
 import { Gpt } from './entities/gpt.entity';
-// @ts-ignore
-import type { PaginatedResult } from '@nodeteam/nestjs-prisma-pagination/index';
 import { map } from 'lodash';
 
 @Injectable()
@@ -16,7 +14,10 @@ export class GptsService {
     private authorService: AuthorService,
     private gizmoMetricsService: GizmoMetricsService,
   ) {}
-  async page(request: GptsGptDot): Promise<PaginatedResult<Gpt>> {
+  async page(request: GptsGptDot): Promise<{
+    data: Gpt[];
+    meta: any;
+  }> {
     const page = await this.gizmosService.page({
       pageNo: request.pageNo,
       pageSize: request.pageSize,

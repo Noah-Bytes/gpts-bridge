@@ -1,33 +1,42 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { AuthorService } from './author.service';
-import { UpdateAuthorDto } from './dto/update-author.dto';
 import { PageAuthorDto } from './dto/page-author.dto';
 import { GetTopAuthorDto } from './dto/get-author.dto';
+import { idDecrypt } from '../utils/confuse';
+import { Author } from './entities/author.entity';
 
 @Controller('author')
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('list')
-  page(@Body() pageAuthorDto: PageAuthorDto) {
-    return this.authorService.page(pageAuthorDto);
+  async page(@Body() pageAuthorDto: PageAuthorDto) {
+    const page = await this.authorService.page(pageAuthorDto);
+    page.data = page.data.map((elem) => new Author(elem));
+
+    return page;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':userId')
-  findOne(@Param('userId') userId: string) {
-    return this.authorService.findOne(userId);
+  async findOne(@Param('userId') userId: string) {
+    const source = await this.authorService.findOne(idDecrypt(userId));
+    return new Author(source);
   }
 
-  @Patch(':userId')
-  update(
-    @Param('userId') userId: string,
-    @Body() updateAuthorDto: UpdateAuthorDto,
-  ) {
-    return this.authorService.update(userId, updateAuthorDto);
-  }
-
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('top')
-  top(@Body() params: GetTopAuthorDto) {
-    return this.authorService.top(params);
+  async top(@Body() params: GetTopAuthorDto) {
+    const source = await this.authorService.top(params);
+    return source.map((elem) => new Author(elem));
   }
 }

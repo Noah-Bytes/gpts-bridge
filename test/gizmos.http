@@ -1,5 +1,5 @@
 ### 获得单个
-GET {{host}}/gizmos/g-5sKOpNnQE
+GET {{host}}/gizmos/96fe272c327c3091ddda7b
 Content-Type: application/json
 
 ### 获取列表

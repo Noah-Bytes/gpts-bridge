@@ -39,7 +39,7 @@ model gizmo {
   description     String?   @db.VarChar(300)
   welcome_message String?   @db.VarChar(400)
   prompt_starters String?   @db.Text
-  short_url       String?   @db.VarChar(100)
+  short_url       String?   @db.VarChar(200)
   categories      String?   @db.VarChar(300)
   updated_at      DateTime  @db.DateTime(0)
   tags            String?   @db.VarChar(200)
@@ -50,6 +50,7 @@ model gizmo {
   pv              BigInt?   @default(0)
   like            BigInt?   @default(0)
   share           BigInt?   @default(0)
+  status          Int?
   create_time     DateTime @default(now()) @db.DateTime(0)
 
   @@index([user_id], map: "gizmo_user_id_index")

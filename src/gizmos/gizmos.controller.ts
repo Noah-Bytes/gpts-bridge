@@ -1,49 +1,66 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { GizmosService } from './gizmos.service';
 import { PageGizmosDto } from './dto/page-gizmos.dto';
 import { TopGizmosMetricsDto } from '../gizmo-metrics/dto/get-gizmo-metrics.dto';
+import { Gizmo } from './entities/gizmo.entity';
+import { IdPipe } from '../utils/id.pipe';
 
 @Controller('gizmos')
 export class GizmosController {
   constructor(private readonly gizmosService: GizmosService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('list')
-  page(@Body() params: PageGizmosDto) {
-    return this.gizmosService.page(params);
+  async page(@Body() params: PageGizmosDto) {
+    const page = await this.gizmosService.page(params);
+    page.data = page.data.map((elem) => new Gizmo(elem));
+    return page;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gizmosService.findOne(id);
+  async findOne(@Param('id', new IdPipe()) id: string) {
+    const source = await this.gizmosService.findOne(id);
+    return new Gizmo(source);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('top')
-  top(@Body() params: TopGizmosMetricsDto) {
-    return this.gizmosService.top(params);
+  async top(@Body() params: TopGizmosMetricsDto): Promise<Gizmo[]> {
+    const source = await this.gizmosService.top(params);
+    return source.map((elem) => new Gizmo(elem));
   }
 
   @Get('uv/:id')
-  uv(@Param('id') id: string) {
+  uv(@Param('id', new IdPipe()) id: string) {
     return this.gizmosService.uv(id);
   }
 
   @Get('pv/:id')
-  pv(@Param('id') id: string) {
+  pv(@Param('id', new IdPipe()) id: string) {
     return this.gizmosService.pv(id);
   }
 
   @Get('like/:id')
-  like(@Param('id') id: string) {
+  like(@Param('id', new IdPipe()) id: string) {
     return this.gizmosService.like(id);
   }
 
   @Get('un_like/:id')
-  unLike(@Param('id') id: string) {
+  unLike(@Param('id', new IdPipe()) id: string) {
     return this.gizmosService.unLike(id);
   }
 
   @Get('share/:id')
-  share(@Param('id') id: string) {
+  share(@Param('id', new IdPipe()) id: string) {
     return this.gizmosService.share(id);
   }
 }

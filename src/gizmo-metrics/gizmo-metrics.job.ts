@@ -8,6 +8,7 @@ import * as dayjs from 'dayjs';
 import { YYYYMMDD } from '../utils/date';
 import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
 import { isDev } from '../utils/env';
+import { GizmoStatus } from '../enums/GizmoStatus';
 
 @Injectable()
 export class GizmoMetricsJob {
@@ -47,9 +48,16 @@ export class GizmoMetricsJob {
 
       for (let i = 0; i < page.data.length; i++) {
         const temp = page.data[i];
+
+        if (temp.status === GizmoStatus.DELETED) {
+          // 跳过已删除的 gizmo
+          continue;
+        }
+
         const metrics = await this.gizmoMetricsService.findOne(temp.id, date);
 
         if (metrics) {
+          // 跳过 昨日数据已经存在 gizmo
           continue;
         }
 
@@ -57,9 +65,13 @@ export class GizmoMetricsJob {
           const gpt = await this.chatOpenaiService.getGizmosByShorUrl(
             temp.short_url,
           );
+          await this.gizmosService.upsertByGpt(gpt);
           await this.gizmoMetricsService.createByGpt(gpt, date);
         } catch (e) {
           this.logger.error(e, e.message);
+          await this.gizmosService.update(temp.id, {
+            status: GizmoStatus.DELETED,
+          });
           continue;
         }
         hadUpdateTotal++;
