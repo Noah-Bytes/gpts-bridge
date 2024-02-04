@@ -27,8 +27,8 @@ export const CHAT_GPTS_SYNC = {
     },
     repair: {
       name: 'repair_job',
-      // 每天的凌晨3点、上午7点、中午11点、下午3点和晚上7点各执行一次。
-      repeatCron: '0 3-23/2 * * *',
+      // 每天的凌晨5点、上午7点、中午11点、下午3点和晚上7点各执行一次。
+      repeatCron: '0 5-23/2 * * *',
       delay: {
         success: 1000,
         exception: 1000 * 60,
