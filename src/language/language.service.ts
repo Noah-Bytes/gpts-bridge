@@ -22,6 +22,7 @@ export class LanguageService {
   }
 
   async create(createLanguageDto: CreateLanguageDto) {
+    this.logger.info(createLanguageDto.id);
     const old = this.findOne(createLanguageDto.id);
     if (!old) {
       this.prismaService.language.create({
