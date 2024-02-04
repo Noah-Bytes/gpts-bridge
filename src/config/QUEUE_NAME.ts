@@ -11,7 +11,7 @@ export const CHAT_GPTS_SYNC = {
     },
     userId: {
       name: 'userId_job',
-      repeatCron: '0 1 * * *',
+      repeatCron: '0 6 * * *',
       delay: {
         success: 1000 * 2,
         exception: 1000 * 30,

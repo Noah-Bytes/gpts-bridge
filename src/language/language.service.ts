@@ -23,7 +23,6 @@ export class LanguageService {
 
   async create(createLanguageDto: CreateLanguageDto) {
     const old = await this.findOne(createLanguageDto.id);
-    this.logger.info('%s, %s', old, createLanguageDto.id);
     if (!old) {
       await this.prismaService.language.create({
         data: createLanguageDto,
