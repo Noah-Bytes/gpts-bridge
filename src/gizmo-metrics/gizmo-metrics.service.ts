@@ -42,21 +42,14 @@ export class GizmoMetricsService {
         gizmoMetrics = this.formatByGpt(gptByApi, yesterday);
       }
 
-      if (gizmoMetrics.num_conversations_str) {
-        // 如果单独获取gpt信息，则根据情况，更新回话数
-        await this.gizmosService.setConversations(
-          gizmoMetrics.gizmo_id,
-          BigInt(gizmoMetrics.num_conversations_str),
-        );
-        await this.prismaService.gizmo_metrics.create({
-          data: gizmoMetrics,
-        });
-      } else {
-        this.logger.info(
-          '主动同步数据出错 %s num_conversations_str无值',
-          gizmoMetrics.gizmo_id,
-        );
-      }
+      // 如果单独获取gpt信息，则根据情况，更新回话数
+      await this.gizmosService.setConversations(
+        gizmoMetrics.gizmo_id,
+        BigInt(gizmoMetrics.num_conversations_str),
+      );
+      await this.prismaService.gizmo_metrics.create({
+        data: gizmoMetrics,
+      });
     }
   }
 
