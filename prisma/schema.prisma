@@ -8,10 +8,10 @@ datasource db {
 }
 
 model author {
-  user_id                     String    @id @db.VarChar(100)
-  display_name                String?    @db.VarChar(30)
-  link_to                     String?   @db.VarChar(1000)
-  selected_display            String?   @db.VarChar(20)
+  user_id                     String   @id @db.VarChar(100)
+  display_name                String?  @db.VarChar(30)
+  link_to                     String?  @db.VarChar(1000)
+  selected_display            String?  @db.VarChar(20)
   is_verified                 Boolean?
   will_receive_support_emails Boolean?
   gpt_total                   Int?
@@ -32,26 +32,26 @@ model category {
 }
 
 model gizmo {
-  id              String    @id @db.VarChar(20)
-  user_id         String    @db.VarChar(100)
-  name            String?   @db.VarChar(64)
-  image           String?   @db.Text
-  description     String?   @db.VarChar(300)
-  welcome_message String?   @db.VarChar(400)
-  prompt_starters String?   @db.Text
-  short_url       String?   @db.VarChar(200)
-  categories      String?   @db.VarChar(300)
-  updated_at      DateTime  @db.DateTime(0)
-  tags            String?   @db.VarChar(200)
-  tools           String?   @db.VarChar(300)
-  language        String?   @db.VarChar(30)
-  conversations   BigInt?   @default(0)
-  uv              BigInt?   @default(0)
-  pv              BigInt?   @default(0)
-  like            BigInt?   @default(0)
-  share           BigInt?   @default(0)
-  status          Int?
+  id              String   @id @db.VarChar(20)
+  user_id         String   @db.VarChar(100)
+  name            String?  @db.VarChar(64)
+  image           String?  @db.Text
+  description     String?  @db.VarChar(300)
+  welcome_message String?  @db.VarChar(400)
+  prompt_starters String?  @db.LongText
+  short_url       String?  @db.VarChar(100)
+  categories      String?  @db.VarChar(300)
+  updated_at      DateTime @db.DateTime(0)
+  tags            String?  @db.VarChar(200)
+  tools           String?  @db.LongText
+  language        String?  @db.VarChar(30)
+  conversations   BigInt?  @default(0)
+  uv              BigInt?  @default(0)
+  pv              BigInt?  @default(0)
+  like            BigInt?  @default(0)
+  share           BigInt?  @default(0)
   create_time     DateTime @default(now()) @db.DateTime(0)
+  status          Int?
 
   @@index([user_id], map: "gizmo_user_id_index")
   @@index([language], map: "gizmo_language_index")
@@ -79,4 +79,13 @@ model gizmo_metrics {
 model language {
   id          String    @id @db.VarChar(30)
   create_time DateTime? @default(now()) @db.DateTime(0)
+}
+
+model daily_report {
+  id    BigInt @unique(map: "daily_report_id_uindex") @default(autoincrement())
+  date  String @db.VarChar(10)
+  value Int
+  type  Int
+
+  @@index([date, type], map: "daily_report_date_type_index")
 }
