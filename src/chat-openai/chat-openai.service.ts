@@ -94,7 +94,7 @@ export class ChatOpenaiService {
   async getGizmosByUser(userId: string): Promise<GizmoByUserId> {
     const { data: resp } = await this.httpService.axiosRef({
       method: 'get',
-      url: `https://chat.openai.com/backend-api//gizmos/u/${userId}`,
+      url: `https://chat.openai.com/backend-api/gizmos/u/${userId}`,
       headers: {
         authority: 'chat.openai.com',
         referer: 'https://chat.openai.com/gpts',

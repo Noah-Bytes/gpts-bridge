@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { CategoryProcessor } from './category.processor';
 import { CategoryProcessorDto } from './dto/category-processor.dto';
 import { QueryProcessorDto } from './dto/query-processor.dto';
@@ -24,6 +24,7 @@ export class BullProcessorController {
     return this.gizmoSearchProcessor.syncGPTsByQueries(params.queries);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('gpt_by_user')
   runAuthor(@Body() params: AuthorProcessorDto) {
     return this.authorProcessor.syncGPTsByUserId(params.userId);
