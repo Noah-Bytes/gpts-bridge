@@ -10,7 +10,7 @@ import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
 import { Queue } from 'bull';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { GetTopAuthorDto } from './dto/get-author.dto';
+import { CountAuthorDto, GetTopAuthorDto } from './dto/get-author.dto';
 
 @Injectable()
 export class AuthorService {
@@ -110,8 +110,15 @@ export class AuthorService {
     );
   }
 
-  count() {
-    return this.prismaService.author.count();
+  count(params?: CountAuthorDto) {
+    return this.prismaService.author.count({
+      where: {
+        user_id: params?.user_id,
+        selected_display: params?.selected_display,
+        is_verified: params?.is_verified,
+        will_receive_support_emails: params?.will_receive_support_emails,
+      },
+    });
   }
 
   top(params: GetTopAuthorDto) {

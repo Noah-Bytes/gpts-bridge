@@ -42,11 +42,6 @@ export class AuthorProcessor {
       items.length,
     );
 
-    // 更新作者，无需更新
-    await this.authorService.update(userId, {
-      gpt_total: items.length,
-    });
-
     for (let i = 0; i < items.length; i++) {
       const gpt = items[i];
       // 更新gpt信息
@@ -57,6 +52,15 @@ export class AuthorProcessor {
       // 创建搜索任务
       await this.gizmoSearchService.createQueueTask(gpt.gizmo.display.name);
     }
+
+    const totalCount = await this.authorService.count({
+      user_id: userId,
+    });
+
+    // 更新作者，无需更新
+    await this.authorService.update(userId, {
+      gpt_total: totalCount,
+    });
 
     return true;
   }
