@@ -140,7 +140,7 @@ export class GizmosService {
   count(params?: CountGizmoDto) {
     return this.prismaService.gizmo.count({
       where: {
-        user_id: params.user_id,
+        user_id: params?.user_id,
       },
     });
   }
