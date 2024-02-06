@@ -53,7 +53,7 @@ export class AuthorProcessor {
       await this.gizmoSearchService.createQueueTask(gpt.gizmo.display.name);
     }
 
-    const totalCount = await this.authorService.count({
+    const totalCount = await this.gizmosService.count({
       user_id: userId,
     });
 

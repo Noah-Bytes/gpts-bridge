@@ -14,7 +14,7 @@ import { Gpt } from '../chat-openai/dto/gpt.dto';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { LanguageService } from '../language/language.service';
-import { TopGizmosDto } from './dto/get-gizmos.dto';
+import { CountGizmoDto, TopGizmosDto } from './dto/get-gizmos.dto';
 import { getNumConversationsStr } from '../utils/format';
 import { Prisma } from '@prisma/client';
 import { GizmosModule } from './gizmos.module';
@@ -137,8 +137,12 @@ export class GizmosService {
     };
   }
 
-  count() {
-    return this.prismaService.gizmo.count();
+  count(params?: CountGizmoDto) {
+    return this.prismaService.gizmo.count({
+      where: {
+        user_id: params.user_id,
+      },
+    });
   }
 
   topForUpdate(params: TopGizmosDto) {

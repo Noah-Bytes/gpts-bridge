@@ -6,3 +6,8 @@ export class TopGizmosDto {
   })
   limit: number;
 }
+
+
+export class CountGizmoDto {
+  user_id?: string;
+}
