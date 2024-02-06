@@ -38,7 +38,7 @@ export class LanguageService {
           id: params.id,
         },
         orderBy: {
-          date: 'desc',
+          create_time: 'desc',
         },
       },
       {

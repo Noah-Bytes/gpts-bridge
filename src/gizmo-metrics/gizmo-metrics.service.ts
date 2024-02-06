@@ -54,6 +54,7 @@ export class GizmoMetricsService {
   }
 
   async createByGpt(gpt: Gpt, date: string) {
+    this.logger.info('%s 更新数据 %s', date, gpt.gizmo.id);
     const gizmoMetrics = this.formatByGpt(gpt, date);
 
     // 如果单独获取gpt信息，则根据情况，更新回话数
