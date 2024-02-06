@@ -17,6 +17,7 @@ import { GptsModule } from '../gpts/gpts.module';
 import { LanguageModule } from '../language/language.module';
 import { BullProcessorModule } from '../bull-processor/bull-processor.module';
 import { ReportModule } from '../report/report.module';
+import { ArticleModule } from '../article/article.module';
 
 @Module({
   imports: [
@@ -79,6 +80,7 @@ import { ReportModule } from '../report/report.module';
     LanguageModule,
     BullProcessorModule,
     ReportModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
