@@ -18,6 +18,7 @@ import { LanguageModule } from '../language/language.module';
 import { BullProcessorModule } from '../bull-processor/bull-processor.module';
 import { ReportModule } from '../report/report.module';
 import { ArticleModule } from '../article/article.module';
+import { DailyReportModule } from '../daily-report/daily-report.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { ArticleModule } from '../article/article.module';
     BullProcessorModule,
     ReportModule,
     ArticleModule,
+    DailyReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

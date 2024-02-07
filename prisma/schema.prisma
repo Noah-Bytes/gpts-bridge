@@ -83,10 +83,11 @@ model language {
 }
 
 model daily_report {
-  id    BigInt @unique(map: "daily_report_id_uindex") @default(autoincrement())
-  date  String @db.VarChar(10)
-  value Int
-  type  Int
+  id      BigInt @unique(map: "daily_report_id_uindex") @default(autoincrement())
+  date    String @db.VarChar(10)
+  value   Int
+  type    Int
+  subType String @db.VarChar(30)
 
   @@index([date, type], map: "daily_report_date_type_index")
 }
