@@ -1,3 +1,5 @@
+import { CronExpression } from '@nestjs/schedule';
+
 export const CHAT_GPTS_SYNC = {
   name: 'chat_gpts_sync',
   jobs: {
@@ -27,8 +29,8 @@ export const CHAT_GPTS_SYNC = {
     },
     repair: {
       name: 'repair_job',
-      // 每天的凌晨5点、上午7点、中午11点、下午3点和晚上7点各执行一次。
-      repeatCron: '0 5-23/2 * * *',
+      // 每天中午12点。
+      repeatCron: CronExpression.EVERY_DAY_AT_NOON,
       delay: {
         success: 1000,
         exception: 1000 * 60,
