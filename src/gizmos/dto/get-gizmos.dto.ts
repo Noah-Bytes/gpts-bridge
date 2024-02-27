@@ -7,7 +7,12 @@ export class TopGizmosDto {
   limit: number;
 }
 
-
 export class CountGizmoDto {
   user_id?: string;
+  createStarDate?: string;
+  createEndDate?: string;
+  uptStartDate?: string;
+  uptEndDate?: string;
+  language?: string;
+  category?: string;
 }

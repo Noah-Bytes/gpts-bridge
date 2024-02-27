@@ -72,14 +72,42 @@ export class GizmosService {
   }
 
   page(params: PageGizmosDto) {
+    const where: any = {
+      id: params.id,
+      user_id: params?.userId,
+      language: params?.language,
+    };
+
+    if (params.createStarDate) {
+      where.create_time = where.create_time || {};
+      where.create_time.gte = params.createStarDate;
+    }
+
+    if (params.createEndDate) {
+      where.create_time = where.create_time || {};
+      where.create_time.lte = params.createEndDate;
+    }
+
+    if (params.uptStartDate) {
+      where.updated_at = where.updated_at || {};
+      where.updated_at.gte = params.uptStartDate;
+    }
+
+    if (params.uptEndDate) {
+      where.updated_at = where.updated_at || {};
+      where.updated_at.lte = params.uptEndDate;
+    }
+
+    if (params.category) {
+      where.categories = {
+        contains: params.category,
+      };
+    }
+
     return paginate<GizmoModel, any>(
       this.prismaService.gizmo,
       {
-        where: {
-          id: params.id,
-          user_id: params.userId,
-          categories: params.category,
-        },
+        where: where,
         orderBy: {
           updated_at: Prisma.SortOrder.desc,
         },
@@ -138,10 +166,39 @@ export class GizmosService {
   }
 
   count(params?: CountGizmoDto) {
+    const where: any = {
+      user_id: params?.user_id,
+      language: params?.language,
+    };
+
+    if (params?.createStarDate) {
+      where.create_time = where.create_time || {};
+      where.create_time.gte = params.createStarDate;
+    }
+
+    if (params?.createEndDate) {
+      where.create_time = where.create_time || {};
+      where.create_time.lte = params.createEndDate;
+    }
+
+    if (params?.uptStartDate) {
+      where.updated_at = where.updated_at || {};
+      where.updated_at.gte = params.uptStartDate;
+    }
+
+    if (params?.uptEndDate) {
+      where.updated_at = where.updated_at || {};
+      where.updated_at.lte = params.uptEndDate;
+    }
+
+    if (params?.category) {
+      where.categories = {
+        contains: params.category,
+      };
+    }
+
     return this.prismaService.gizmo.count({
-      where: {
-        user_id: params?.user_id,
-      },
+      where,
     });
   }
 

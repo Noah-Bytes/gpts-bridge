@@ -87,7 +87,7 @@ model daily_report {
   date    String @db.VarChar(10)
   value   Int
   type    Int
-  subType String @db.VarChar(30)
+  subType String? @db.VarChar(30)
 
   @@index([date, type], map: "daily_report_date_type_index")
 }

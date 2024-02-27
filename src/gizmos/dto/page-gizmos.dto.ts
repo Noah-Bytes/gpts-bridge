@@ -10,4 +10,10 @@ export class PageGizmosDto extends IPage {
   userId?: string;
 
   category?: string;
+
+  createStarDate?: string;
+  createEndDate?: string;
+  uptStartDate?: string;
+  uptEndDate?: string;
+  language?: string;
 }

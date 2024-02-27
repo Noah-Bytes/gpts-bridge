@@ -7,10 +7,10 @@ import { GizmosService } from '../gizmos/gizmos.service';
 import * as dayjs from 'dayjs';
 import { YYYYMMDD } from '../utils/date';
 import { ChatOpenaiService } from '../chat-openai/chat-openai.service';
-import { isDev } from '../utils/env';
 import { GizmoStatus } from '../enums/GizmoStatus';
 import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
 import { setTimeout } from 'node:timers/promises';
+import { isDev } from '../utils/env';
 
 @Injectable()
 export class GizmoMetricsJob {
@@ -23,13 +23,11 @@ export class GizmoMetricsJob {
 
   /**
    * 补漏逻辑
-   * 每天的凌晨3点、上午7点、中午11点、下午3点和晚上7点各执行一次。
+   * 每天中午12点
    */
   @Cron(CHAT_GPTS_SYNC.jobs.repair.repeatCron)
   async repair() {
-    if (isDev()) {
-      return;
-    }
+    if (isDev()) return;
 
     let pageNo = 1,
       total = 0,
