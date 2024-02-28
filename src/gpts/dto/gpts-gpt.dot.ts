@@ -11,6 +11,7 @@ export class GptsGptDot extends IPage {
 
   category?: string;
   date?: string;
+  query?: string;
 }
 
 export class GptDot {

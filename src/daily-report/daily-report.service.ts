@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma.service';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import * as dayjs from 'dayjs';
-import { YYYYMMDD, YYYYMMDDhhmmss } from '../utils/date';
+import { YYYYMMDD } from '../utils/date';
 import { GizmoStatus } from '../enums/GizmoStatus';
 import { GizmosService } from '../gizmos/gizmos.service';
 import {

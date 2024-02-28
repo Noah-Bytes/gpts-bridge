@@ -9,7 +9,7 @@ datasource db {
 
 model author {
   user_id                     String   @id @db.VarChar(100)
-  display_name                String?  @db.VarChar(30)
+  display_name                String?  @db.VarChar(200)
   link_to                     String?  @db.VarChar(1000)
   selected_display            String?  @db.VarChar(20)
   is_verified                 Boolean?

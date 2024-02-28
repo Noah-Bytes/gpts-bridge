@@ -78,6 +78,12 @@ export class GizmosService {
       language: params?.language,
     };
 
+    if (params.query) {
+      where.name = {
+        contains: params.query,
+      };
+    }
+
     if (params.createStarDate) {
       where.create_time = where.create_time || {};
       where.create_time.gte = params.createStarDate;

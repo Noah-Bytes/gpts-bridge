@@ -16,4 +16,5 @@ export class PageGizmosDto extends IPage {
   uptStartDate?: string;
   uptEndDate?: string;
   language?: string;
+  query?: string;
 }

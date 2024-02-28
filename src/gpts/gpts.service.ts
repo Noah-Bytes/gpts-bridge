@@ -22,6 +22,7 @@ export class GptsService {
       pageNo: request.pageNo,
       pageSize: request.pageSize,
       userId: request.userId,
+      query: request.query,
       category: request.category,
     });
 
