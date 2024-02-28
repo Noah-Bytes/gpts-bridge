@@ -47,7 +47,7 @@ export class DailyReportService {
           subType: params.subType,
         },
         orderBy: {
-          date: Prisma.SortOrder.desc,
+          date: Prisma.SortOrder.asc,
         },
       },
       {
