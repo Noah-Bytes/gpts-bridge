@@ -114,7 +114,7 @@ export class GizmosService {
       this.prismaService.gizmo,
       {
         where: where,
-        orderBy: {
+        orderBy: params.orderBy || {
           updated_at: Prisma.SortOrder.desc,
         },
       },

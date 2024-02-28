@@ -12,4 +12,8 @@ export class IPage {
 
   @IsNotEmpty()
   pageSize: number;
+
+  orderBy?: {
+    [key: string]: string;
+  };
 }
