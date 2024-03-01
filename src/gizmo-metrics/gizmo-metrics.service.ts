@@ -13,6 +13,10 @@ import { GizmosService } from '../gizmos/gizmos.service';
 import { keyBy } from 'lodash';
 import { YYYYMMDD } from '../utils/date';
 import { getNumConversationsStr } from '../utils/format';
+import { gizmo as GizmoModule } from '.prisma/client';
+import { GizmoStatus } from '../enums/GizmoStatus';
+import { setTimeout } from 'node:timers/promises';
+import { CHAT_GPTS_SYNC } from '../config/QUEUE_NAME';
 
 @Injectable()
 export class GizmoMetricsService {
@@ -135,6 +139,11 @@ export class GizmoMetricsService {
       take: params.limit,
     });
 
+    if (list.length === 0) {
+      await this.createTop1000();
+      return [];
+    }
+
     const gizmosList = await this.gizmosService.findByIds(
       list.map((elem) => elem.gizmo_id),
     );
@@ -145,5 +154,54 @@ export class GizmoMetricsService {
       ...elem,
       gizmos: gizmosMap[elem.gizmo_id],
     }));
+  }
+
+  async createByGizmos(item: GizmoModule, date: string) {
+    if (item.status === GizmoStatus.DELETED) {
+      // 跳过已删除的 gizmo
+      return false;
+    }
+
+    const metrics = await this.findOne(item.id, date);
+
+    if (metrics) {
+      // 跳过 昨日数据已经存在 gizmo
+      return false;
+    }
+
+    try {
+      const gpt = await this.chatOpenaiService.getGizmosByShorUrl(
+        item.short_url,
+      );
+      await this.gizmosService.upsertByGpt(gpt);
+      await this.createByGpt(gpt, date);
+      await setTimeout(CHAT_GPTS_SYNC.jobs.repair.delay.success);
+      return true;
+    } catch (e) {
+      this.logger.error(e, e.message);
+      if (e.message.indexOf('status code 404') > -1) {
+        await this.gizmosService.update(item.id, {
+          status: GizmoStatus.DELETED,
+        });
+        return false;
+      }
+    }
+  }
+
+  async createTop1000() {
+    const page = await this.gizmosService.page({
+      pageNo: 1,
+      pageSize: 1000,
+      orderBy: {
+        conversations: Prisma.SortOrder.desc,
+      },
+    });
+
+    const date = dayjs().subtract(1, 'days').format(YYYYMMDD);
+
+    for (let i = 0; i < page.data.length; i++) {
+      const temp = page.data[i];
+      await this.createByGizmos(temp, date);
+    }
   }
 }
