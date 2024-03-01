@@ -140,7 +140,7 @@ export class GizmoMetricsService {
     });
 
     if (list.length === 0) {
-      await this.createTop1000();
+      this.createTop1000().then();
       return [];
     }
 
