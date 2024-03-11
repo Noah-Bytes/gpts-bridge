@@ -25,12 +25,15 @@ export class GizmoSearchProcessor {
     const { query } = job.data;
     const queries = query.split(' ');
     for (let i = 0; i < queries.length; i++) {
-      try {
-        await this.syncGPTsBySearch(queries[i]);
-        await setTimeout(CHAT_GPTS_SYNC.jobs.query.delay.success);
-      } catch (e) {
-        await setTimeout(CHAT_GPTS_SYNC.jobs.query.delay.exception);
-        throw e;
+      const text = queries[i].trim();
+      if (text) {
+        try {
+          await this.syncGPTsBySearch(text);
+          await setTimeout(CHAT_GPTS_SYNC.jobs.query.delay.success);
+        } catch (e) {
+          await setTimeout(CHAT_GPTS_SYNC.jobs.query.delay.exception);
+          throw e;
+        }
       }
     }
   }
