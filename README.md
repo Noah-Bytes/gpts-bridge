@@ -1,7 +1,14 @@
 # GPTS-bridge
 
+GPTs Collector And Report And Link
 
-### 注册队列
+## 已完成
+
+1. GPT Info
+2. GPT Authors
+3. Rank (By Author/By Category/By Language/By Conversation)
+
+## Queue
 * 去重
 
 1、category
@@ -9,9 +16,9 @@
 3、search
 
 
-## 部署
+## Deploy
 
-### 问题
+## Question
 
 1. git action 不支持 pnpm，换成 npm
 
